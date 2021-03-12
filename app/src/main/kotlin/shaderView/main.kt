@@ -19,6 +19,7 @@ class AppListener : GLEventListener {
 		val bgColor = Vec4(0.5f, 0.5f, 0.5f, 1f)
 	}
 
+	val shaders: MutableList<Shader> = mutableListOf()
 	val objects: MutableCollection<Object3D> = mutableListOf()
 
 	val mats = PMVMatrix()
@@ -43,18 +44,18 @@ class AppListener : GLEventListener {
 			glCullFace(GL.GL_BACK)
 		}
 
-		val shader = Shader(
-			Path.of("app/src/main/resources/simple.vert"),
-			Path.of("app/src/main/resources/simple.frag")
-		)
-		val obj = Plane(shader)
-		objects.add(obj)
-		shader.init(gl)
-		objects.forEach {
-			it.init(gl, mats)
+		shaders.apply {
+			val shader0 = Shader(
+				Path.of("app/src/main/resources/simple.vert"),
+				Path.of("app/src/main/resources/simple.frag")
+			)
+			add(shader0)
 		}
+		objects.add(Plane(shaders[0]))
 
-		//objs.init(gl, mats, null);
+		shaders.forEach { it.init(gl) }
+		objects.forEach { it.init(gl, mats) }
+
 		gl.glUseProgram(0)
 	}
 
