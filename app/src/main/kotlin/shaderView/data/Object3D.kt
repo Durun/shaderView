@@ -4,10 +4,10 @@ import com.jogamp.opengl.GL2ES2
 import com.jogamp.opengl.GL3
 import com.jogamp.opengl.util.PMVMatrix
 
-abstract class Object3D {
+abstract class Object3D(val shader: Shader) {
 	private val storedprogramID = IntArray(1)
 
-	abstract fun init(gl: GL3, mat: PMVMatrix, shader: Shader)
+	abstract fun init(gl: GL3, mat: PMVMatrix)
 	abstract fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>)
 	fun bindProgram(gl: GL2ES2, shader: Shader) {
 		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, storedprogramID, 0)

@@ -2,6 +2,7 @@ package shaderView
 
 import com.jogamp.opengl.*
 import com.jogamp.opengl.util.PMVMatrix
+import shaderView.data.Object3D
 import shaderView.data.Shader
 import shaderView.data.Vec3
 import shaderView.data.Vec4
@@ -18,11 +19,8 @@ class AppListener : GLEventListener {
 		val bgColor = Vec4(0.5f, 0.5f, 0.5f, 1f)
 	}
 
-	val shader = Shader(
-		Path.of("app/src/main/resources/simple.vert"),
-		Path.of("app/src/main/resources/simple.frag")
-	)
-	val obj = Plane()
+	val objects: MutableCollection<Object3D> = mutableListOf()
+
 	val mats = PMVMatrix()
 	var t = 0f
 
@@ -45,8 +43,16 @@ class AppListener : GLEventListener {
 			glCullFace(GL.GL_BACK)
 		}
 
+		val shader = Shader(
+			Path.of("app/src/main/resources/simple.vert"),
+			Path.of("app/src/main/resources/simple.frag")
+		)
+		val obj = Plane(shader)
+		objects.add(obj)
 		shader.init(gl)
-		obj.init(gl, mats, shader)
+		objects.forEach {
+			it.init(gl, mats)
+		}
 
 		//objs.init(gl, mats, null);
 		gl.glUseProgram(0)
@@ -73,7 +79,9 @@ class AppListener : GLEventListener {
 			if (i != 2) mats.glRotatef(90f, 1f, 0f, 0f)
 			mats.glRotatef(45f, 0f, 0f, 1f)
 			mats.update()
-			obj.display(gl, mats, lightpos, lightcolor)
+			objects.forEach {
+				it.display(gl, mats, lightpos, lightcolor)
+			}
 			mats.glPopMatrix()
 		}
 

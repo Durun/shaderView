@@ -8,7 +8,7 @@ import shaderView.data.*
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
-class Plane : Object3D() {
+class Plane(shader: Shader) : Object3D(shader) {
 	private val VertexData = floatArrayOf(
 		-1.0f, -1.0f, 0f, 0.0f, 0.0f, -1.0f, 1f, 0f, 0f, 1f, 0f, 0f,  //#0
 		1.0f, -1.0f, 0f, 0.0f, 0.0f, -1.0f, 1f, 1f, 0f, 1f, 1f, 0f,  //#1
@@ -36,9 +36,7 @@ class Plane : Object3D() {
 	private var TextureName = 0
 	private var uniformTexture = 0
 	private lateinit var img: TextureImage
-	private lateinit var shader: Shader
-	override fun init(gl: GL3, mat: PMVMatrix, shader: Shader) {
-		this.shader = shader
+	override fun init(gl: GL3, mat: PMVMatrix) {
 		val tmp = IntArray(1)
 		gl.glGenBuffers(1, tmp, 0)
 		ArrayBufferName = tmp[0]

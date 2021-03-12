@@ -16,9 +16,8 @@ class Shader(vshaderfile: Path, fshaderfile: Path) {
 	var uniformLightColor = 0
 
 	fun init(gl: GL2ES2) {
-		var shaderid: Int
 		iD = gl.glCreateProgram()
-		shaderid = gl.glCreateShader(GL2GL3.GL_VERTEX_SHADER)
+		var shaderid: Int = gl.glCreateShader(GL2GL3.GL_VERTEX_SHADER)
 		gl.glShaderSource(shaderid, vertexShaderSrc)
 		gl.glCompileShader(shaderid)
 		checkCompileError(gl, shaderid)
