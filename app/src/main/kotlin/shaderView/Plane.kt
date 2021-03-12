@@ -62,36 +62,22 @@ class Plane(shader: Shader) : Object3D(shader) {
 		gl.glActiveTexture(GL.GL_TEXTURE0)
 		gl.glEnable(GL.GL_TEXTURE_2D)
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, TextureName)
-		gl.glTexParameteri(
-			GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER,
-			GL.GL_NEAREST
-		)
-		//                 GL.GL_LINEAR);
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP)
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP)
 
-		gl.glTexParameteri(
-			GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER,
-			GL.GL_NEAREST
-		)
-		//                       GL.GL_LINEAR);
-		gl.glTexParameteri(
-			GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S,
-			GL2.GL_CLAMP
-		)
-		gl.glTexParameteri(
-			GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T,
-			GL2.GL_CLAMP
-		)
 		gl.glTexImage2D(
 			GL2.GL_TEXTURE_2D, 0, GL.GL_RGBA8, img.width,
 			img.height, 0, GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
 			img.byteBuffer
 		)
 
-		bindProgram(gl)
-		uniformTexture = gl.glGetUniformLocation(shader.id, "texture0")
-		gl.glUniform1i(uniformTexture, 0)
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0)
-		unbindProgram(gl)
+		bindProgram(gl) {
+			uniformTexture = glGetUniformLocation(shader.id, "texture0")
+			glUniform1i(uniformTexture, 0)
+			glBindTexture(GL2.GL_TEXTURE_2D, 0)
+		}
 	}
 
 	override fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
