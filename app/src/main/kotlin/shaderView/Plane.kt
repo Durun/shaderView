@@ -87,7 +87,7 @@ class Plane(shader: Shader) : Object3D(shader) {
 			img.byteBuffer
 		)
 
-		bindProgram(gl, shader)
+		bindProgram(gl)
 		uniformTexture = gl.glGetUniformLocation(shader.iD, "texture0")
 		gl.glUniform1i(uniformTexture, 0)
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0)
@@ -95,7 +95,7 @@ class Plane(shader: Shader) : Object3D(shader) {
 	}
 
 	override fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
-		bindProgram(gl, shader)
+		bindProgram(gl)
 		shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, TextureName)
 		gl.glUniform1i(uniformTexture, 0)
