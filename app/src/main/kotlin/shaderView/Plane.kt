@@ -18,12 +18,8 @@ class Plane(gl: GL2ES2, texture: TextureImage, shader: Shader) : Object3D(shader
 			Vertex(Vec3(-1f, 1f, 0f), normal, red, Vec2(0f, 1f))
 		)
 	}
-	private val ElementData = intArrayOf(
-		0, 1, 2,  //polygon#0
-		0, 2, 3, //pollgon#1
-		0, 2, 1,  //polygon#0
-		0, 3, 2 //pollgon#1
-	)
+	private val polygon = Polygon(vertice)
+	private val ElementData = polygon.elementArray + polygon.elementArray.reversed()
 	private val elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
 	private val vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, vertice.toFloatArray())
 	private val textureId = gl.addTexture(GL.GL_TEXTURE0, texture)
