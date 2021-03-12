@@ -9,12 +9,17 @@ import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
 class Plane(shader: Shader) : Object3D(shader) {
-	private val VertexData = floatArrayOf(
-		-1.0f, -1.0f, 0f, 0.0f, 0.0f, -1.0f, 1f, 0f, 0f, 1f, 0f, 0f,  //#0
-		1.0f, -1.0f, 0f, 0.0f, 0.0f, -1.0f, 1f, 1f, 0f, 1f, 1f, 0f,  //#1
-		1.0f, 1.0f, 0f, 0.0f, 0.0f, -1.0f, 0f, 1f, 0f, 1f, 1f, 1f,  //#2
-		-1.0f, 1.0f, 0f, 0.0f, 0.0f, -1.0f, 0f, 0f, 1f, 1f, 0f, 1f
-	) //position            normal              color          texcoord
+	private val vertice = run {
+		val normal = Vec3(0f, 0f, -1f)
+		val red = Vec4(1f, 0f, 0f, 1f)
+		listOf(
+			Vertex(Vec3(-1f, -1f, 0f), normal, red, Vec2(0f, 0f)),
+			Vertex(Vec3(1f, -1f, 0f), normal, red, Vec2(1f, 0f)),
+			Vertex(Vec3(1f, 1f, 0f), normal, red, Vec2(1f, 1f)),
+			Vertex(Vec3(-1f, 1f, 0f), normal, red, Vec2(0f, 1f))
+		)
+	}
+	private val VertexData = vertice.toFloatArray()
 	private val NormalOffset = java.lang.Float.SIZE / 8 * 3
 	private val ColorOffset = java.lang.Float.SIZE / 8 * 6
 	private val TexCoordOffset = java.lang.Float.SIZE / 8 * 10
