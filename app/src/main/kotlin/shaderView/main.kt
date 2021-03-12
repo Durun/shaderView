@@ -2,10 +2,7 @@ package shaderView
 
 import com.jogamp.opengl.*
 import com.jogamp.opengl.util.PMVMatrix
-import shaderView.data.Object3D
-import shaderView.data.Shader
-import shaderView.data.Vec3
-import shaderView.data.Vec4
+import shaderView.data.*
 import java.nio.file.Path
 
 fun main() {
@@ -52,7 +49,7 @@ class AppListener : GLEventListener {
 			)
 			add(shader0)
 		}
-		objects.add(Plane(gl, shaders[0]))
+		objects.add(Plane(gl, DotImage(512, 512), shaders[0]))
 		gl.glUseProgram(0)
 	}
 

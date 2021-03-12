@@ -7,7 +7,7 @@ import com.jogamp.opengl.GL3
 import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
 
-class Plane(gl: GL2ES2, shader: Shader) : Object3D(shader) {
+class Plane(gl: GL2ES2, texture: TextureImage, shader: Shader) : Object3D(shader) {
 	private val vertice = run {
 		val normal = Vec3(0f, 0f, -1f)
 		val red = Vec4(1f, 0f, 0f, 1f)
@@ -18,18 +18,15 @@ class Plane(gl: GL2ES2, shader: Shader) : Object3D(shader) {
 			Vertex(Vec3(-1f, 1f, 0f), normal, red, Vec2(0f, 1f))
 		)
 	}
-	private val VertexData = vertice.toFloatArray()
 	private val ElementData = intArrayOf(
 		0, 1, 2,  //polygon#0
 		0, 2, 3, //pollgon#1
 		0, 2, 1,  //polygon#0
 		0, 3, 2 //pollgon#1
 	)
-	private val PolygonCount = ElementData.size / 3
-	private val ElementCount = ElementData.size
-	private var elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
-	private var vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, VertexData)
-	private var textureId = gl.addTexture(GL.GL_TEXTURE0, DotImage(512, 512))
+	private val elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
+	private val vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, vertice.toFloatArray())
+	private val textureId = gl.addTexture(GL.GL_TEXTURE0, texture)
 	private var uniformTexture = 0
 
 	init {
@@ -55,7 +52,7 @@ class Plane(gl: GL2ES2, shader: Shader) : Object3D(shader) {
 			glEnableVertexAttribArray(VERTEXCOLOR)
 			glEnableVertexAttribArray(VERTEXNORMAL)
 			glEnableVertexAttribArray(VERTEXTEXCOORD0)
-			glDrawElements(GL.GL_TRIANGLES, ElementCount, GL.GL_UNSIGNED_INT, 0)
+			glDrawElements(GL.GL_TRIANGLES, ElementData.size, GL.GL_UNSIGNED_INT, 0)
 			glDisableVertexAttribArray(VERTEXPOSITION)
 			glDisableVertexAttribArray(VERTEXNORMAL)
 			glDisableVertexAttribArray(VERTEXCOLOR)
