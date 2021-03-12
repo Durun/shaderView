@@ -71,7 +71,7 @@ class Shader(vshaderfile: Path, fshaderfile: Path) {
 	fun setMatrixAndLight(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		gl.glUniformMatrix4fv(uniformMat, 4, false, mats.glGetPMvMvitMatrixf())
 		lightpos.let { (x, y, z) -> gl.glUniform3f(uniformLightPos, x, y, z) }
-		lightpos.let { (r, g, b) -> gl.glUniform3f(uniformLightColor, r, g, b) }
+		lightcolor.let { (r, g, b) -> gl.glUniform3f(uniformLightColor, r, g, b) }
 	}
 
 	fun validateProgram(gl: GL2ES2) {
