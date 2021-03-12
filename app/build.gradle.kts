@@ -49,7 +49,17 @@ dependencies {
 	implementation("com.google.guava:guava:29.0-jre")
 }
 
+tasks {
+	compileKotlin {
+		kotlinOptions.jvmTarget = "11"
+	}
+}
+java {
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
+}
+
 application {
-    // Define the main class for the application.
-    mainClass.set("shaderView.AppKt")
+	// Define the main class for the application.
+	mainClass.set("shaderView.AppKt")
 }
