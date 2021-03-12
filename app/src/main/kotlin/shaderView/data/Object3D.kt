@@ -11,14 +11,6 @@ abstract class Object3D(
 
 	abstract fun init(gl: GL3)
 	abstract fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>)
-	fun bindProgram(gl: GL2ES2) {
-		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, storedprogramID, 0)
-		gl.glUseProgram(shader.id)
-	}
-
-	fun unbindProgram(gl: GL2ES2) {
-		gl.glUseProgram(storedprogramID[0])
-	}
 
 	fun bindProgram(gl: GL2ES2, block: GL2ES2.() -> Unit) {
 		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, storedprogramID, 0)

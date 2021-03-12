@@ -39,22 +39,9 @@ class Plane(shader: Shader) : Object3D(shader) {
 	private lateinit var img: TextureImage
 	override fun init(gl: GL3) {
 		val tmp = IntArray(1)
-		gl.glGenBuffers(1, tmp, 0)
-		ArrayBufferName = tmp[0]
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, ArrayBufferName)
-		gl.glBufferData(
-			GL.GL_ARRAY_BUFFER, VertexSize.toLong(), FBVertexData,
-			GL.GL_STATIC_DRAW
-		)
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
-		gl.glGenBuffers(1, tmp, 0)
-		ElementBufferName = tmp[0]
-		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementBufferName)
-		gl.glBufferData(
-			GL.GL_ELEMENT_ARRAY_BUFFER, ElementSize.toLong(), IBElementData,
-			GL.GL_STATIC_DRAW
-		)
-		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
+
+		ArrayBufferName = gl.addBuffer(GL.GL_ARRAY_BUFFER, VertexData)
+		ElementBufferName = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
 
 		//img = new ImageLoader("circles.png");
 		img = DotImage(512, 512)
@@ -108,7 +95,6 @@ class Plane(shader: Shader) : Object3D(shader) {
 	}
 
 	companion object {
-		private const val FLOAT_BYTES = java.lang.Float.SIZE / 8
 		private const val OFFSET_NORMAL = 3 * FLOAT_BYTES
 		private const val OFFSET_COLOR = 6 * FLOAT_BYTES
 		private const val OFFSET_TEXCOORD = 10 * FLOAT_BYTES
