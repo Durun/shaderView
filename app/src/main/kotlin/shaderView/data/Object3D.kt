@@ -9,7 +9,6 @@ abstract class Object3D(
 ) {
 	private val storedprogramID = IntArray(1)
 
-	abstract fun init(gl: GL3)
 	abstract fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>)
 
 	fun bindProgram(gl: GL2ES2, block: GL2ES2.() -> Unit) {

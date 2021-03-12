@@ -52,10 +52,7 @@ class AppListener : GLEventListener {
 			)
 			add(shader0)
 		}
-		objects.add(Plane(shaders[0]))
-
-		objects.forEach { it.init(gl) }
-
+		objects.add(Plane(gl, shaders[0]))
 		gl.glUseProgram(0)
 	}
 

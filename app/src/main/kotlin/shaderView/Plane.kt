@@ -2,11 +2,12 @@ package shaderView
 
 import com.jogamp.opengl.GL
 import com.jogamp.opengl.GL2
+import com.jogamp.opengl.GL2ES2
 import com.jogamp.opengl.GL3
 import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
 
-class Plane(shader: Shader) : Object3D(shader) {
+class Plane(gl: GL2ES2, shader: Shader) : Object3D(shader) {
 	private val vertice = run {
 		val normal = Vec3(0f, 0f, -1f)
 		val red = Vec4(1f, 0f, 0f, 1f)
@@ -26,15 +27,12 @@ class Plane(shader: Shader) : Object3D(shader) {
 	)
 	private val PolygonCount = ElementData.size / 3
 	private val ElementCount = ElementData.size
-	private var ElementBufferName = 0
-	private var ArrayBufferName = 0
-	private var TextureName = 0
+	private var elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
+	private var vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, VertexData)
+	private var textureId = gl.addTexture(GL.GL_TEXTURE0, DotImage(512, 512))
 	private var uniformTexture = 0
-	override fun init(gl: GL3) {
-		ArrayBufferName = gl.addBuffer(GL.GL_ARRAY_BUFFER, VertexData)
-		ElementBufferName = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
-		TextureName = gl.addTexture(GL.GL_TEXTURE0, DotImage(512, 512))
 
+	init {
 		bindProgram(gl) {
 			uniformTexture = glGetUniformLocation(shader.id, "texture0")
 			glUniform1i(uniformTexture, 0)
@@ -45,14 +43,14 @@ class Plane(shader: Shader) : Object3D(shader) {
 	override fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		bindProgram(gl) {
 			shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
-			glBindTexture(GL2.GL_TEXTURE_2D, TextureName)
+			glBindTexture(GL2.GL_TEXTURE_2D, textureId)
 			glUniform1i(uniformTexture, 0)
-			glBindBuffer(GL.GL_ARRAY_BUFFER, ArrayBufferName)
+			glBindBuffer(GL.GL_ARRAY_BUFFER, vertexBufferId)
 			glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, 48, 0)
 			glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, OFFSET_NORMAL.toLong())
 			glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, 48, OFFSET_COLOR.toLong())
 			glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, 48, OFFSET_TEXCOORD.toLong())
-			glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementBufferName)
+			glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementBufferId)
 			glEnableVertexAttribArray(VERTEXPOSITION)
 			glEnableVertexAttribArray(VERTEXCOLOR)
 			glEnableVertexAttribArray(VERTEXNORMAL)
