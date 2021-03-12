@@ -20,11 +20,7 @@ class Plane(shader: Shader) : Object3D(shader) {
 		)
 	}
 	private val VertexData = vertice.toFloatArray()
-	private val NormalOffset = java.lang.Float.SIZE / 8 * 3
-	private val ColorOffset = java.lang.Float.SIZE / 8 * 6
-	private val TexCoordOffset = java.lang.Float.SIZE / 8 * 10
-	private val VertexCount = VertexData.size / 12
-	private val VertexSize = VertexData.size * java.lang.Float.SIZE / 8
+	private val VertexSize = VertexData.size * FLOAT_BYTES
 	private val FBVertexData = FloatBuffer.wrap(VertexData)
 	private val ElementData = intArrayOf(
 		0, 1, 2,  //polygon#0
@@ -92,9 +88,9 @@ class Plane(shader: Shader) : Object3D(shader) {
 			glUniform1i(uniformTexture, 0)
 			glBindBuffer(GL.GL_ARRAY_BUFFER, ArrayBufferName)
 			glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, 48, 0)
-			glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, NormalOffset.toLong())
-			glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, 48, ColorOffset.toLong())
-			glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, 48, TexCoordOffset.toLong())
+			glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, OFFSET_NORMAL.toLong())
+			glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, 48, OFFSET_COLOR.toLong())
+			glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, 48, OFFSET_TEXCOORD.toLong())
 			glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementBufferName)
 			glEnableVertexAttribArray(VERTEXPOSITION)
 			glEnableVertexAttribArray(VERTEXCOLOR)
@@ -109,5 +105,12 @@ class Plane(shader: Shader) : Object3D(shader) {
 			glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
 			glBindTexture(GL2.GL_TEXTURE_2D, 0)
 		}
+	}
+
+	companion object {
+		private const val FLOAT_BYTES = java.lang.Float.SIZE / 8
+		private const val OFFSET_NORMAL = 3 * FLOAT_BYTES
+		private const val OFFSET_COLOR = 6 * FLOAT_BYTES
+		private const val OFFSET_TEXCOORD = 10 * FLOAT_BYTES
 	}
 }
