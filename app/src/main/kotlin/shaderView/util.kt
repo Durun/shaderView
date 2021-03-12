@@ -60,14 +60,21 @@ fun GL2ES2.addBuffer(target: Int, array: FloatArray): Int {
 	return bufferId
 }
 
+fun <R> GL2ES2.bindBuffer(target: Int, bufferId: Int, block: GL2ES2.() -> R): R {
+	glBindBuffer(target, bufferId)
+	val result = runCatching { this.block() }
+	glBindBuffer(target, 0)
+	return result.getOrThrow()
+}
+
 const val INT_BYTES = Integer.SIZE / 8
 fun GL2ES2.addBuffer(target: Int, array: IntArray): Int {
 	val tmp = IntArray(1)
 	glGenBuffers(1, tmp, 0)
 	val bufferId = tmp[0]
-	glBindBuffer(target, bufferId)
-	glBufferData(target, array.size * INT_BYTES.toLong(), IntBuffer.wrap(array), GL.GL_STATIC_DRAW)
-	glBindBuffer(target, 0)
+	bindBuffer(target, bufferId) {
+		glBufferData(target, array.size * INT_BYTES.toLong(), IntBuffer.wrap(array), GL.GL_STATIC_DRAW)
+	}
 	return bufferId
 }
 
