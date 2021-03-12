@@ -46,6 +46,7 @@ class AppListener : GLEventListener {
 
 		shaders.apply {
 			val shader0 = Shader(
+				gl,
 				Path.of("app/src/main/resources/simple.vert"),
 				Path.of("app/src/main/resources/simple.frag")
 			)
@@ -53,7 +54,6 @@ class AppListener : GLEventListener {
 		}
 		objects.add(Plane(shaders[0]))
 
-		shaders.forEach { it.init(gl) }
 		objects.forEach { it.init(gl) }
 
 		gl.glUseProgram(0)

@@ -88,7 +88,7 @@ class Plane(shader: Shader) : Object3D(shader) {
 		)
 
 		bindProgram(gl)
-		uniformTexture = gl.glGetUniformLocation(shader.iD, "texture0")
+		uniformTexture = gl.glGetUniformLocation(shader.id, "texture0")
 		gl.glUniform1i(uniformTexture, 0)
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0)
 		unbindProgram(gl)

@@ -13,7 +13,7 @@ abstract class Object3D(
 	abstract fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>)
 	fun bindProgram(gl: GL2ES2) {
 		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, storedprogramID, 0)
-		gl.glUseProgram(shader.iD)
+		gl.glUseProgram(shader.id)
 	}
 
 	fun unbindProgram(gl: GL2ES2) {
