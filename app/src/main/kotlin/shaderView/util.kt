@@ -36,3 +36,11 @@ fun GL2ES2.attachShader(programId: Int, type: Int, shaderCode: String) {
 	glAttachShader(programId, shaderId)
 	glDeleteShader(shaderId)
 }
+
+private const val maxLogLength = 8192
+fun GL2ES2.getProgramInfoLogString(programId: Int): String {
+	val buffer = ByteArray(maxLogLength)
+	val readLength = IntArray(1)
+	glGetProgramInfoLog(programId, maxLogLength, readLength, 0, buffer, 0)
+	return buffer.decodeToString(0, readLength[0] - 1)
+}
