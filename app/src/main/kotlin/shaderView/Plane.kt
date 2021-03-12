@@ -36,7 +36,7 @@ class Plane(shader: Shader) : Object3D(shader) {
 	private var TextureName = 0
 	private var uniformTexture = 0
 	private lateinit var img: TextureImage
-	override fun init(gl: GL3, mat: PMVMatrix) {
+	override fun init(gl: GL3) {
 		val tmp = IntArray(1)
 		gl.glGenBuffers(1, tmp, 0)
 		ArrayBufferName = tmp[0]
