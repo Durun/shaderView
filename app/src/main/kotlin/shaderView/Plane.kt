@@ -95,43 +95,28 @@ class Plane(shader: Shader) : Object3D(shader) {
 	}
 
 	override fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
-		bindProgram(gl)
-		shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, TextureName)
-		gl.glUniform1i(uniformTexture, 0)
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, ArrayBufferName)
-		gl.glVertexAttribPointer(
-			VERTEXPOSITION, 3, GL.GL_FLOAT,
-			false, 48, 0
-		)
-		gl.glVertexAttribPointer(
-			VERTEXNORMAL, 3, GL.GL_FLOAT,
-			false, 48, NormalOffset.toLong()
-		)
-		gl.glVertexAttribPointer(
-			VERTEXCOLOR, 4, GL.GL_FLOAT,
-			false, 48, ColorOffset.toLong()
-		)
-		gl.glVertexAttribPointer(
-			VERTEXTEXCOORD0, 2, GL.GL_FLOAT,
-			false, 48, TexCoordOffset.toLong()
-		)
-		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementBufferName)
-		gl.glEnableVertexAttribArray(VERTEXPOSITION)
-		gl.glEnableVertexAttribArray(VERTEXCOLOR)
-		gl.glEnableVertexAttribArray(VERTEXNORMAL)
-		gl.glEnableVertexAttribArray(VERTEXTEXCOORD0)
-		gl.glDrawElements(GL.GL_TRIANGLES, ElementCount, GL.GL_UNSIGNED_INT, 0)
-		gl.glDisableVertexAttribArray(VERTEXPOSITION)
-		gl.glDisableVertexAttribArray(VERTEXNORMAL)
-		gl.glDisableVertexAttribArray(VERTEXCOLOR)
-		gl.glDisableVertexAttribArray(VERTEXTEXCOORD0)
-		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0)
-		// Unbind the shader program of this object and restore the shader of the
-		// parent object
-		unbindProgram(gl)
-
+		bindProgram(gl) {
+			shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
+			glBindTexture(GL2.GL_TEXTURE_2D, TextureName)
+			glUniform1i(uniformTexture, 0)
+			glBindBuffer(GL.GL_ARRAY_BUFFER, ArrayBufferName)
+			glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, 48, 0)
+			glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, NormalOffset.toLong())
+			glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, 48, ColorOffset.toLong())
+			glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, 48, TexCoordOffset.toLong())
+			glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementBufferName)
+			glEnableVertexAttribArray(VERTEXPOSITION)
+			glEnableVertexAttribArray(VERTEXCOLOR)
+			glEnableVertexAttribArray(VERTEXNORMAL)
+			glEnableVertexAttribArray(VERTEXTEXCOORD0)
+			glDrawElements(GL.GL_TRIANGLES, ElementCount, GL.GL_UNSIGNED_INT, 0)
+			glDisableVertexAttribArray(VERTEXPOSITION)
+			glDisableVertexAttribArray(VERTEXNORMAL)
+			glDisableVertexAttribArray(VERTEXCOLOR)
+			glDisableVertexAttribArray(VERTEXTEXCOORD0)
+			glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
+			glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
+			glBindTexture(GL2.GL_TEXTURE_2D, 0)
+		}
 	}
 }

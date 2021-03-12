@@ -20,6 +20,14 @@ abstract class Object3D(
 		gl.glUseProgram(storedprogramID[0])
 	}
 
+	fun bindProgram(gl: GL2ES2, block: GL2ES2.() -> Unit) {
+		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, storedprogramID, 0)
+		gl.glUseProgram(shader.id)
+		val result = runCatching { gl.block() }
+		gl.glUseProgram(storedprogramID[0])
+		result.getOrThrow()
+	}
+
 	companion object {
 		const val VERTEXPOSITION = 0
 		const val VERTEXCOLOR = 1
