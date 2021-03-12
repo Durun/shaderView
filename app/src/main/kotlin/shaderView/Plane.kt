@@ -27,14 +27,11 @@ class Plane(gl: GL2ES2, texture: TextureImage, shader: Shader) : Object3D(shader
 	private val elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
 	private val vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, vertice.toFloatArray())
 	private val textureId = gl.addTexture(GL.GL_TEXTURE0, texture)
-	private var uniformTexture = 0
-
-	init {
-		bindProgram(gl) {
-			uniformTexture = glGetUniformLocation(shader.id, "texture0")
-			glUniform1i(uniformTexture, 0)
-			glBindTexture(GL2.GL_TEXTURE_2D, 0)
-		}
+	private val uniformTexture = bindProgram(gl) {
+		val id = glGetUniformLocation(shader.id, "texture0")
+		glUniform1i(id, 0)
+		glBindTexture(GL2.GL_TEXTURE_2D, 0)
+		id
 	}
 
 	override fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
