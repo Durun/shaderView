@@ -78,21 +78,29 @@ fun GL2ES2.addBuffer(target: Int, array: IntArray): Int {
 	return bufferId
 }
 
+fun <R> GL2ES2.bindTexture(target: Int, textureId: Int, block: GL2ES2.() -> R): R {
+	glBindTexture(target, textureId)
+	val result = runCatching { this.block() }
+	glBindTexture(target, 0)
+	return result.getOrThrow()
+}
+
 fun GL2ES2.addTexture(target: Int, image: TextureImage): Int {
 	val tmp = IntArray(1)
 	glGenTextures(1, tmp, 0)
 	val textureId = tmp[0]
 	glActiveTexture(target)
 	glEnable(GL.GL_TEXTURE_2D)
-	glBindTexture(GL2.GL_TEXTURE_2D, textureId)
-	glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
-	glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-	glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP)
-	glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP)
-	glTexImage2D(
-		GL2.GL_TEXTURE_2D, 0, GL.GL_RGBA8, image.width,
-		image.height, 0, GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
-		image.byteBuffer
-	)
+	bindTexture(GL2.GL_TEXTURE_2D, textureId) {
+		glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
+		glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
+		glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP)
+		glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP)
+		glTexImage2D(
+			GL2.GL_TEXTURE_2D, 0, GL.GL_RGBA8, image.width,
+			image.height, 0, GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
+			image.byteBuffer
+		)
+	}
 	return textureId
 }
