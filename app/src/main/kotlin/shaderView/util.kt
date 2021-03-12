@@ -4,7 +4,9 @@ import com.jogamp.newt.event.WindowAdapter
 import com.jogamp.newt.event.WindowEvent
 import com.jogamp.newt.opengl.GLWindow
 import com.jogamp.opengl.GL
+import com.jogamp.opengl.GL2
 import com.jogamp.opengl.GL2ES2
+import shaderView.data.TextureImage
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
@@ -67,4 +69,23 @@ fun GL2ES2.addBuffer(target: Int, array: IntArray): Int {
 	glBufferData(target, array.size * INT_BYTES.toLong(), IntBuffer.wrap(array), GL.GL_STATIC_DRAW)
 	glBindBuffer(target, 0)
 	return bufferId
+}
+
+fun GL2ES2.addTexture(target: Int, image: TextureImage): Int {
+	val tmp = IntArray(1)
+	glGenTextures(1, tmp, 0)
+	val textureId = tmp[0]
+	glActiveTexture(target)
+	glEnable(GL.GL_TEXTURE_2D)
+	glBindTexture(GL2.GL_TEXTURE_2D, textureId)
+	glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
+	glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
+	glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP)
+	glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP)
+	glTexImage2D(
+		GL2.GL_TEXTURE_2D, 0, GL.GL_RGBA8, image.width,
+		image.height, 0, GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
+		image.byteBuffer
+	)
+	return textureId
 }

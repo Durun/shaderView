@@ -30,30 +30,10 @@ class Plane(shader: Shader) : Object3D(shader) {
 	private var ArrayBufferName = 0
 	private var TextureName = 0
 	private var uniformTexture = 0
-	private lateinit var img: TextureImage
 	override fun init(gl: GL3) {
-		val tmp = IntArray(1)
-
 		ArrayBufferName = gl.addBuffer(GL.GL_ARRAY_BUFFER, VertexData)
 		ElementBufferName = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
-
-		//img = new ImageLoader("circles.png");
-		img = DotImage(512, 512)
-		gl.glGenTextures(1, tmp, 0)
-		TextureName = tmp[0]
-		gl.glActiveTexture(GL.GL_TEXTURE0)
-		gl.glEnable(GL.GL_TEXTURE_2D)
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, TextureName)
-		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
-		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST)
-		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP)
-		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP)
-
-		gl.glTexImage2D(
-			GL2.GL_TEXTURE_2D, 0, GL.GL_RGBA8, img.width,
-			img.height, 0, GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
-			img.byteBuffer
-		)
+		TextureName = gl.addTexture(GL.GL_TEXTURE0, DotImage(512, 512))
 
 		bindProgram(gl) {
 			uniformTexture = glGetUniformLocation(shader.id, "texture0")
