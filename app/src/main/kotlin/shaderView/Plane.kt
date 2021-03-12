@@ -34,7 +34,7 @@ class Plane(gl: GL2ES2, texture: TextureImage, shader: Shader) : Object3D(shader
 		id
 	}
 
-	override fun display(gl: GL3, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
+	override fun display(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		bindProgram(gl) {
 			shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
 			bindTexture(GL2.GL_TEXTURE_2D, textureId) {

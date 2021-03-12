@@ -26,7 +26,7 @@ class AppListener : GLEventListener {
 	val lightcolor = Vec3(1.0000f, 0.9434f, 0.9927f) // D65 light
 
 	override fun init(drawable: GLAutoDrawable) {
-		val gl: GL3 = drawable.gl.gL3
+		val gl = drawable.gl.gL2ES2
 		gl.glViewport(0, 0, width, height)
 
 		// Clear color buffer with black
@@ -54,7 +54,7 @@ class AppListener : GLEventListener {
 	}
 
 	override fun display(drawable: GLAutoDrawable) {
-		val gl: GL3 = drawable.gl.gL3
+		val gl = drawable.gl.gL2ES2
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT or GL.GL_DEPTH_BUFFER_BIT)
 
