@@ -5,8 +5,6 @@ import com.jogamp.opengl.GL2
 import com.jogamp.opengl.GL3
 import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
-import java.nio.FloatBuffer
-import java.nio.IntBuffer
 
 class Plane(shader: Shader) : Object3D(shader) {
 	private val vertice = run {
@@ -20,8 +18,6 @@ class Plane(shader: Shader) : Object3D(shader) {
 		)
 	}
 	private val VertexData = vertice.toFloatArray()
-	private val VertexSize = VertexData.size * FLOAT_BYTES
-	private val FBVertexData = FloatBuffer.wrap(VertexData)
 	private val ElementData = intArrayOf(
 		0, 1, 2,  //polygon#0
 		0, 2, 3, //pollgon#1
@@ -30,8 +26,6 @@ class Plane(shader: Shader) : Object3D(shader) {
 	)
 	private val PolygonCount = ElementData.size / 3
 	private val ElementCount = ElementData.size
-	private val ElementSize = ElementCount * Integer.SIZE / 8
-	private val IBElementData = IntBuffer.wrap(ElementData)
 	private var ElementBufferName = 0
 	private var ArrayBufferName = 0
 	private var TextureName = 0
