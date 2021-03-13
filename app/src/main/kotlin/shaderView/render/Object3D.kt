@@ -1,8 +1,9 @@
-package shaderView.data
+package shaderView.render
 
 import com.jogamp.opengl.GL2ES2
 import com.jogamp.opengl.GL3
 import com.jogamp.opengl.util.PMVMatrix
+import shaderView.data.Vec3
 
 abstract class Object3D(
 	protected val shader: Shader

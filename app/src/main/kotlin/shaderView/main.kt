@@ -6,6 +6,9 @@ import com.jogamp.opengl.GLAutoDrawable
 import com.jogamp.opengl.GLEventListener
 import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
+import shaderView.render.Object3D
+import shaderView.render.Shader
+import shaderView.render.textured
 import java.nio.file.Path
 
 fun main() {
@@ -55,17 +58,11 @@ class AppListener : GLEventListener {
 
 		val texture = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
 		objects.add(makePlane(0.5f).textured(gl, listOf(texture), shaders[0]))
-		val red = Vec4(1f, 0f, 0f, 1f)
-		val cylinder = Cylinder(
-			gl,
-			4, 0.4f, 0.4f, false, floatArrayOf(1f, 1f, 1f, 1f), red,
-			listOf(loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))), shaders[0]
-		)
-		objects.add(cylinder)
-		objects.add(cylinder)
-		objects.add(cylinder)
 		objects.add(makeCylinder(4, 0.3f, 0.3f).textured(gl, listOf(texture), shaders[0]))
 		objects.add(makeCylinder(6, 0.3f, 0.3f).textured(gl, listOf(texture), shaders[0]))
+		objects.add(makeCylinder(32, 0.3f, 0.3f).textured(gl, listOf(texture), shaders[0]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, listOf(texture), shaders[0]))
+		objects.add(makeCylinder(3, 0.3f, 0.3f).textured(gl, listOf(texture), shaders[0]))
 		gl.glUseProgram(0)
 	}
 

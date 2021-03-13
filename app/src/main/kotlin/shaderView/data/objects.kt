@@ -1,6 +1,5 @@
-package shaderView
+package shaderView.data
 
-import shaderView.data.*
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt

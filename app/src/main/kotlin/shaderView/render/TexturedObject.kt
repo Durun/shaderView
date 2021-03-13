@@ -1,4 +1,4 @@
-package shaderView.data
+package shaderView.render
 
 import com.jogamp.opengl.GL
 import com.jogamp.opengl.GL2
@@ -8,6 +8,10 @@ import shaderView.addBuffer
 import shaderView.addTexture
 import shaderView.bindBuffer
 import shaderView.bindTextures
+import shaderView.data.PolygonSet
+import shaderView.data.TextureImage
+import shaderView.data.Vec3
+import shaderView.data.Vertex
 
 class TexturedObject(
 	gl: GL2ES2,

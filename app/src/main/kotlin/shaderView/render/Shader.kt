@@ -1,10 +1,11 @@
-package shaderView.data
+package shaderView.render
 
 import com.jogamp.opengl.GL
 import com.jogamp.opengl.GL2ES2
 import com.jogamp.opengl.GL2GL3
 import com.jogamp.opengl.util.PMVMatrix
 import shaderView.attachShader
+import shaderView.data.Vec3
 import shaderView.getProgramInfoLogString
 import java.nio.file.Path
 
