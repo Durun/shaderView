@@ -54,7 +54,7 @@ class AppListener : GLEventListener {
 		}
 		objects.add(Plane(gl, DotImage(512, 512), shaders[0]))
 		objects.add(Plane(gl, DotImage(256, 512), shaders[0]))
-		objects.add(Plane(gl, FileImage("app/src/main/resources/BrickNormalMap.png"), shaders[0]))
+		objects.add(Plane(gl, FileImage(Path.of("app/src/main/resources/BrickNormalMap.png")), shaders[0]))
 		gl.glUseProgram(0)
 	}
 
