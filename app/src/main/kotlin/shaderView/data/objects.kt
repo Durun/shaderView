@@ -57,14 +57,17 @@ fun makeCylinder(
 				val (x, y) = vTop.position
 				val r = sqrt(x * x + y * y)
 				val normal = Vec3(x / r, y / r, 0f)
+				val tangent = Vec3(y / r, -x / r, 0f)
 				val textureX = if (i < n / 2) 2.0f * i / n else 2.0f * (n - i) / n
 				listOf(
 					vTop.copy(
 						normal = normal,
+						tangent = tangent,
 						textureCoord = Vec2(textureX, 0f)
 					),
 					vBottom.copy(
 						normal = normal,
+						tangent = tangent,
 						textureCoord = Vec2(textureX, 1f)
 					)
 				)
@@ -81,12 +84,13 @@ fun makeCylinder(
 				val (x, y) = (v1.position + v4.position) / 2f
 				val r = sqrt(x * x + y * y)
 				val normal = Vec3(x / r, y / r, 0f)
+				val tangent = Vec3(y / r, -x / r, 0f)
 				val polygon: PolygonSet = Polygon(
 					listOf(
-						v1.copy(normal = normal),
-						v2.copy(normal = normal),
-						v3.copy(normal = normal),
-						v4.copy(normal = normal),
+						v1.copy(normal = normal, tangent = tangent),
+						v2.copy(normal = normal, tangent = tangent),
+						v3.copy(normal = normal, tangent = tangent),
+						v4.copy(normal = normal, tangent = tangent),
 					)
 				)
 				polygon
