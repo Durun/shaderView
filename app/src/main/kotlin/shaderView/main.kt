@@ -1,6 +1,9 @@
 package shaderView
 
-import com.jogamp.opengl.*
+import com.jogamp.opengl.GL
+import com.jogamp.opengl.GL2
+import com.jogamp.opengl.GLAutoDrawable
+import com.jogamp.opengl.GLEventListener
 import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
 import java.nio.file.Path
@@ -50,6 +53,8 @@ class AppListener : GLEventListener {
 			add(shader0)
 		}
 		objects.add(Plane(gl, DotImage(512, 512), shaders[0]))
+		objects.add(Plane(gl, DotImage(256, 512), shaders[0]))
+		objects.add(Plane(gl, DotImage(256, 256), shaders[0]))
 		gl.glUseProgram(0)
 	}
 
@@ -66,18 +71,13 @@ class AppListener : GLEventListener {
 		mats.glLoadIdentity()
 		mats.glTranslatef(0f, 0f, -4.0f)
 
-		for (i in 0..5) {
-			mats.glPushMatrix()
-			mats.glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
-			//mats.glTranslatef(0f,-0.4f+0.8f*(float)Math.sin((t+90)/180.0*Math.PI),0f);
-			mats.glRotatef(t, 0.3f, 1f, 0f)
-			if (i != 2) mats.glRotatef(90f, 1f, 0f, 0f)
-			mats.glRotatef(45f, 0f, 0f, 1f)
-			mats.update()
-			objects.forEach {
-				it.display(gl, mats, lightpos, lightcolor)
+
+		objects.forEachIndexed { i, it ->
+			it.displayAt(gl, mats, lightpos, lightcolor) {
+				mats.glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
+				mats.glRotatef(t, 0.3f, 1f, 0f)
+				mats.glRotatef(45f, 0f, 0f, 1f)
 			}
-			mats.glPopMatrix()
 		}
 
 		gl.glFlush()
