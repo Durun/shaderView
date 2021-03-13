@@ -52,7 +52,16 @@ class AppListener : GLEventListener {
 			)
 			add(shader0)
 		}
+
 		objects.add(Plane(gl, loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png")), shaders[0]))
+		val red = Vec4(1f, 0f, 0f, 1f)
+		objects.add(
+			Cylinder(
+				gl,
+				4, 1f, 1f, false, floatArrayOf(1f, 1f, 1f, 1f), red,
+				listOf(loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))), shaders[0]
+			)
+		)
 		gl.glUseProgram(0)
 	}
 
