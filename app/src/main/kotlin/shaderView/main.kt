@@ -54,7 +54,7 @@ class AppListener : GLEventListener {
 		}
 
 		val texture = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
-		objects.add(makePlane(gl, listOf(texture), shaders[0]))
+		objects.add(makePlane(0.5f).textured(gl, listOf(texture), shaders[0]))
 		val red = Vec4(1f, 0f, 0f, 1f)
 		val cylinder = Cylinder(
 			gl,

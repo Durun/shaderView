@@ -61,3 +61,7 @@ class TexturedObject(
 		}
 	}
 }
+
+fun PolygonSet.textured(gl: GL2ES2, textures: List<TextureImage>, shader: Shader): Object3D {
+	return TexturedObject(gl, this, textures, shader)
+}
