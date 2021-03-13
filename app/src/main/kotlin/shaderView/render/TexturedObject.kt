@@ -51,11 +51,13 @@ class TexturedObject(
 				glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, Vertex.OFFSET_NORMAL.toLong())
 				glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, 48, Vertex.OFFSET_COLOR.toLong())
 				glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, 48, Vertex.OFFSET_TEXCOORD.toLong())
+				//glVertexAttribPointer(VERTEXTANGENT, 3, GL.GL_FLOAT, false, 48, Vertex.OFFSET_TANGENT.toLong())
 				bindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementBufferId) {
 					glEnableVertexAttribArray(VERTEXPOSITION)
 					glEnableVertexAttribArray(VERTEXCOLOR)
 					glEnableVertexAttribArray(VERTEXNORMAL)
 					glEnableVertexAttribArray(VERTEXTEXCOORD0)
+					//glEnableVertexAttribArray(VERTEXTANGENT)
 
 					glDrawElements(GL.GL_TRIANGLES, elementSize, GL.GL_UNSIGNED_INT, 0)
 
@@ -63,6 +65,7 @@ class TexturedObject(
 					glDisableVertexAttribArray(VERTEXNORMAL)
 					glDisableVertexAttribArray(VERTEXCOLOR)
 					glDisableVertexAttribArray(VERTEXTEXCOORD0)
+					//glDisableVertexAttribArray(VERTEXTANGENT)
 				}
 			}
 		}

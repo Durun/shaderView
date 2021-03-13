@@ -6,11 +6,12 @@ import kotlin.math.sqrt
 
 fun makePlane(sizeX: Float, sizeY: Float = sizeX, color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f)): PolygonSet {
 	val normal = Vec3(0f, 0f, -1f)
+	val tangent = Vec3(-1f, 0f, 0f)
 	val vertice = listOf(
-		Vertex(Vec3(-sizeX, -sizeY, 0f), normal, color, Vec2(0f, 0f)),
-		Vertex(Vec3(sizeX, -sizeY, 0f), normal, color, Vec2(1f, 0f)),
-		Vertex(Vec3(sizeX, sizeY, 0f), normal, color, Vec2(1f, 1f)),
-		Vertex(Vec3(-sizeX, sizeY, 0f), normal, color, Vec2(0f, 1f))
+		Vertex(Vec3(-sizeX, -sizeY, 0f), normal, color, Vec2(0f, 0f), tangent),
+		Vertex(Vec3(sizeX, -sizeY, 0f), normal, color, Vec2(1f, 0f), tangent),
+		Vertex(Vec3(sizeX, sizeY, 0f), normal, color, Vec2(1f, 1f), tangent),
+		Vertex(Vec3(-sizeX, sizeY, 0f), normal, color, Vec2(0f, 1f), tangent)
 	)
 	val front = Polygon(vertice)
 	val back = Polygon(vertice.reversed())
@@ -37,13 +38,15 @@ fun makeCylinder(
 			textureCoord = Vec2(
 				x = (-0.5 * cos(angle) + 0.5f).toFloat(),
 				y = (0.5 * sin(angle) + 0.5f).toFloat()
-			)
+			),
+			tangent = Vec3(-1f, 0f, 0f)
 		)
 	}
 	val bottomVertices = topVertices.map {
 		it.copy(
 			position = it.position.copy(z = -it.position.z),
-			normal = -it.normal
+			normal = -it.normal,
+			tangent = -it.tangent
 		)
 	}
 	val top = Polygon(topVertices.asReversed())
