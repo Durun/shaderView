@@ -175,7 +175,7 @@ void main (void){
   float wet = 1.0-d*0.01;
 
   // color parameters
-  float brightness = texture2D(texture1, uv).x * 0.7 + 0.3;
+  float brightness = texture2D(texture1, uv).x * 0.5 + 0.5;
   float roughness = 1.0 - texture2D(texture2, uv).x*0.2 - wet*0.7;
   vec3 diffuseColor = color.xyz * brightness;
   vec3 specularColor = lightcolor;

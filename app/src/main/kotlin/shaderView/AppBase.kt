@@ -29,6 +29,7 @@ class AppBase(
                 eventListener?.let {
                     addGLEventListener(it)
                     addMouseListener(it.mouseListener)
+                    addKeyListener(it.keyListener)
                 }
 
             }
