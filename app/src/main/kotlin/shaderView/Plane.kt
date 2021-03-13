@@ -60,5 +60,5 @@ fun makeRoll(): PolygonSet {
 		)
 	}
 	val vertice = top.zip(bottom).flatMap { (vTop, vBottom) -> listOf(vTop, vBottom) }
-	return Sheet(vertice)
+	return Sheet(vertice, looped = true)
 }

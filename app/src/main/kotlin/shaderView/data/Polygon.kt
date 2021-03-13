@@ -44,13 +44,14 @@ class Polygon(vertice: List<Vertex>) : PolygonSet {
     }
 }
 
-class Sheet(vertice: List<Vertex>) : PolygonSet {
+class Sheet(vertice: List<Vertex>, looped: Boolean = false) : PolygonSet {
     override val vertexArray: FloatArray
     override val elementArray: IntArray
 
     init {
         val size = vertice.size
-        val triangles = vertice.mapIndexed { i, _ ->
+        val firstVertice = if (looped) vertice else vertice.dropLast(2)
+        val triangles = firstVertice.mapIndexed { i, _ ->
             val v1 = i
             val v2 = (if (v1 % 2 == 0) i + 2 else i + 1) % size
             val v3 = (if (v1 % 2 == 0) i + 1 else i + 2) % size
