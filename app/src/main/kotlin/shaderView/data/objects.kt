@@ -23,12 +23,12 @@ fun makePlane(
 	val back = Polygon(vertice.reversed().map {
 		it.copy(
 			normal = -it.normal,
-			tangent = it.tangent,
-			textureCoord = -it.textureCoord
+			tangent = Vec3(0f, -1f, 0f),
+			textureCoord = it.textureCoord.swapped()
 		)
 	})
 
-	return front// + back
+	return front + back
 }
 
 fun makeCylinder(

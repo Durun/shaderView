@@ -22,4 +22,5 @@ data class Vec2<T : Float>(
 	val y: T
 ) {
 	operator fun unaryMinus(): Vec2<Float> = Vec2(-x, -y)
+	fun swapped(): Vec2<Float> = Vec2(y, x)
 }
