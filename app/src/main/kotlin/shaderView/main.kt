@@ -58,7 +58,7 @@ class AppListener : GLEventListener {
 			val shader1 = Shader(
 				gl,
 				Path.of("app/src/main/resources/vertex.vert"),
-				Path.of("app/src/main/resources/tangent.frag")
+				Path.of("app/src/main/resources/brick.frag")
 			)
 			add(shader1)
 		}
@@ -69,10 +69,10 @@ class AppListener : GLEventListener {
 		val brickTextures = listOf(brickNormal, brickDiffuse, brickHeight)
 		objects.add(makePlane(0.5f).textured(gl, listOf(brickNormal), shaders[0]))
 		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
-		objects.add(makeCylinder(32, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
+		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, brickTextures, shaders[1]))
 		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
 		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
-		objects.add(makeCylinder(32, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
+		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, brickTextures, shaders[1]))
 		gl.glUseProgram(0)
 	}
 
