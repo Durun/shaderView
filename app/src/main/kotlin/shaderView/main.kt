@@ -74,9 +74,9 @@ class AppListener : GLEventListener {
 
 		objects.forEachIndexed { i, it ->
 			it.displayAt(gl, mats, lightpos, lightcolor) {
-				mats.glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
-				mats.glRotatef(t, 0.3f, 1f, 0f)
-				mats.glRotatef(45f, 0f, 0f, 1f)
+				glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
+				glRotatef(t, 0.3f, 1f, 0f)
+				glRotatef(45f, 0f, 0f, 1f)
 			}
 		}
 
