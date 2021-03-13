@@ -79,9 +79,24 @@ fun GL2ES2.addBuffer(target: Int, array: IntArray): Int {
 }
 
 fun <R> GL2ES2.bindTexture(target: Int, textureId: Int, block: GL2ES2.() -> R): R {
+	glActiveTexture(textureId)
 	glBindTexture(target, textureId)
 	val result = runCatching { this.block() }
+	glActiveTexture(textureId)
 	glBindTexture(target, 0)
+	return result.getOrThrow()
+}
+
+fun <R> GL2ES2.bindTextures(target: Int, textureIds: List<Int>, block: GL2ES2.() -> R): R {
+	textureIds.forEach {
+		glActiveTexture(it)
+		glBindTexture(target, it)
+	}
+	val result = runCatching { this.block() }
+	textureIds.forEach {
+		glActiveTexture(it)
+		glBindTexture(target, 0)
+	}
 	return result.getOrThrow()
 }
 

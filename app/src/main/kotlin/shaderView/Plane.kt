@@ -6,7 +6,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-fun makePlane(gl: GL2ES2, texture: TextureImage, shader: Shader): Object3D {
+fun makePlane(gl: GL2ES2, textures: List<TextureImage>, shader: Shader): Object3D {
 	val normal = Vec3(0f, 0f, -1f)
 	val red = Vec4(1f, 0f, 0f, 1f)
 	val vertice = listOf(
@@ -18,11 +18,11 @@ fun makePlane(gl: GL2ES2, texture: TextureImage, shader: Shader): Object3D {
 	val front = Polygon(vertice)
 	val back = Polygon(vertice.reversed())
 	val polygons = front + back
-	return TexturedObject(gl, polygons, texture, shader)
+	return TexturedObject(gl, polygons, textures, shader)
 }
 
-fun PolygonSet.textured(gl: GL2ES2, texture: TextureImage, shader: Shader): Object3D {
-	return TexturedObject(gl, this, texture, shader)
+fun PolygonSet.textured(gl: GL2ES2, textures: List<TextureImage>, shader: Shader): Object3D {
+	return TexturedObject(gl, this, textures, shader)
 }
 
 fun makeCylinder(n: Int, radius: Float, height: Float, color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f)): PolygonSet {

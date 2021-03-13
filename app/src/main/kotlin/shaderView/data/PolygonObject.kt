@@ -7,12 +7,12 @@ import com.jogamp.opengl.util.PMVMatrix
 import shaderView.addBuffer
 import shaderView.addTexture
 import shaderView.bindBuffer
-import shaderView.bindTexture
+import shaderView.bindTextures
 
 class TexturedObject(
 	gl: GL2ES2,
 	polygonSet: PolygonSet,
-	texture: TextureImage,
+	textures: List<TextureImage>,
 	shader: Shader,
 ) : Object3D(shader) {
 
@@ -20,19 +20,24 @@ class TexturedObject(
 	private val elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, polygonSet.elementArray)
 	private val elementSize = polygonSet.elementArray.size
 
-	private val textureId = gl.addTexture(GL.GL_TEXTURE0, texture)
-	private val textureUniform = bindProgram(gl) {
-		val id = glGetUniformLocation(shader.id, "texture0")
-		glUniform1i(id, 0)
-		glBindTexture(GL2.GL_TEXTURE_2D, 0)
-		id
+	private val textureIds: List<Int> = textures.mapIndexed { i, it ->
+		gl.addTexture(GL.GL_TEXTURE0 + i, it)
+	}
+	private val textureUniforms: List<Int> = bindProgram(gl) {
+		textures.mapIndexed { i, _ ->
+			glGetUniformLocation(shader.id, "texture$i")
+				.also {
+					glUniform1i(it, i)
+					glBindTexture(GL2.GL_TEXTURE_2D, i)
+				}
+		}
 	}
 
 	override fun display(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		bindProgram(gl) {
 			shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
-			bindTexture(GL2.GL_TEXTURE_2D, textureId) {
-				glUniform1i(textureUniform, 0)
+			bindTextures(GL2.GL_TEXTURE_2D, textureIds) {
+				textureUniforms.forEachIndexed { i, it -> glUniform1i(it, i) }
 				bindBuffer(GL.GL_ARRAY_BUFFER, vertexBufferId) {
 					glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, 48, 0)
 					glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, Vertex.OFFSET_NORMAL.toLong())
