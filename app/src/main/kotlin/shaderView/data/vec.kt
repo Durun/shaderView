@@ -11,7 +11,9 @@ data class Vec3<T : Float>(
 	val x: T,
 	val y: T,
 	val z: T
-)
+) {
+	operator fun unaryMinus(): Vec3<Float> = Vec3(-x, -y, -z)
+}
 
 data class Vec2<T : Float>(
 	val x: T,

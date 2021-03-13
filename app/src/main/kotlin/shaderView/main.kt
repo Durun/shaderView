@@ -55,6 +55,7 @@ class AppListener : GLEventListener {
 
 		objects.add(makePlane(gl, loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png")), shaders[0]))
 		val red = Vec4(1f, 0f, 0f, 1f)
+		val texture = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
 		val cylinder = Cylinder(
 			gl,
 			4, 0.4f, 0.4f, false, floatArrayOf(1f, 1f, 1f, 1f), red,
@@ -63,14 +64,8 @@ class AppListener : GLEventListener {
 		objects.add(cylinder)
 		objects.add(cylinder)
 		objects.add(cylinder)
-		objects.add(cylinder)
-		objects.add(
-			makeRoll().textured(
-				gl,
-				loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png")),
-				shaders[0]
-			)
-		)
+		objects.add(makeCylinder(4, 0.3f, 0.3f).textured(gl, texture, shaders[0]))
+		objects.add(makeCylinder(6, 0.3f, 0.3f).textured(gl, texture, shaders[0]))
 		gl.glUseProgram(0)
 	}
 

@@ -24,12 +24,9 @@ fun PolygonSet.textured(gl: GL2ES2, texture: TextureImage, shader: Shader): Obje
 	return TexturedObject(gl, this, texture, shader)
 }
 
-fun makeRoll(): PolygonSet {
-	val num = 3
-	val radius = 1f
-	val height = 1f
-	val angles = (0 until num).map { (it * 2 * Math.PI / num) }
-	val top = angles.map { angle ->
+fun makeCylinder(n: Int, radius: Float, height: Float): PolygonSet {
+	val angles = (0 until n).map { (it * 2 * Math.PI / n) }
+	val topVertices = angles.map { angle ->
 		Vertex(
 			position = Vec3(
 				x = (radius * cos(angle)).toFloat(),
@@ -44,21 +41,16 @@ fun makeRoll(): PolygonSet {
 			)
 		)
 	}
-	val bottom = angles.map { angle ->
-		Vertex(
-			position = Vec3(
-				x = (radius * cos(angle)).toFloat(),
-				y = (radius * sin(angle)).toFloat(),
-				z = height / 2f
-			),
-			normal = Vec3(0f, 0f, -1f),
-			color = Vec4(0f, 1f, 0f, 1f),
-			textureCoord = Vec2(
-				x = (-0.5 * cos(angle) + 0.5f).toFloat(),
-				y = (0.5 * sin(angle) + 0.5f).toFloat()
-			)
+	val bottomVertices = topVertices.map {
+		it.copy(
+			position = it.position.copy(z = -it.position.z),
+			normal = -it.normal
 		)
 	}
-	val vertice = top.zip(bottom).flatMap { (vTop, vBottom) -> listOf(vTop, vBottom) }
-	return Sheet(vertice, looped = true)
+	val top = Polygon(topVertices.asReversed())
+	val bottom = Polygon(bottomVertices)
+	val side = topVertices.zip(bottomVertices)
+		.flatMap { (vTop, vBottom) -> listOf(vTop, vBottom) }
+		.let { Sheet(it, looped = true) }
+	return top + bottom + side
 }
