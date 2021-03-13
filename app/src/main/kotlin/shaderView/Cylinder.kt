@@ -7,6 +7,8 @@ import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.math.cos
+import kotlin.math.sin
 
 class Cylinder(
 	gl: GL2ES2,
@@ -14,20 +16,8 @@ class Cylinder(
 	color: Vec4<Float>, textureimages: List<TextureImage>, shader: Shader
 ) : Object3D(shader) {
 	private val VertexData: FloatArray
-
-	//example for one vertex
-	//{ -1.0f,  1.0f,  0f,  0.0f, 0.0f,-1.0f,     0f,1f }
-	//  position            normal                texcoord
 	private val VertexData2: FloatArray
-
-	//example for one vertex
-	//{ 0f,0f,1f,1f }
-	//  color
 	private val VertexData3: FloatArray
-
-	//example for one vertex
-	//{ -1.0f,  1.0f,  0f }
-	//  tangent
 	private val NormalOffset = FLOAT_BYTES * 3
 	private val ColorOffset = 0 //Float.SIZE/8*0;
 	private val TangentOffset = 0 //Float.SIZE/8*0;
@@ -53,6 +43,7 @@ class Cylinder(
 	private val uniformTextures: MutableList<Int> = ArrayList()
 	private val images: List<TextureImage>
 
+
 	init {
 		images = textureimages
 		var offset = 0 // center of bottom
@@ -73,7 +64,7 @@ class Cylinder(
 		VertexData[5] = -1.0f
 		VertexData[6] = 0.5f
 		VertexData[7] = 0.5f
-		setColor(0, color)
+		setColor(0, Vec4(0f, 0f, 1f, 1f))
 		setTangent(0, Vec3(-1f, 0f, 0f))
 		offset = 1
 		for (i in 0 until num + 1) { // bottom
@@ -86,9 +77,28 @@ class Cylinder(
 			VertexData[j * 8 + 5] = -1.0f
 			VertexData[j * 8 + 6] = (-0.5 * Math.cos(i * 2 * Math.PI / num) + 0.5f).toFloat()
 			VertexData[j * 8 + 7] = (0.5 * Math.sin(i * 2 * Math.PI / num) + 0.5f).toFloat()
-			setColor(j, color)
+			setColor(j, Vec4(0f, 1f, 0f, 1f))
 			setTangent(j, Vec3(-1f, 0f, 0f))
 		}
+
+		val topVertice = (0 until num).map { (it * 2 * Math.PI / num) }.map { angle ->
+			Vertex(
+				position = Vec3(
+					x = (radius * cos(angle)).toFloat(),
+					y = (radius * sin(angle)).toFloat(),
+					z = -height / 2f
+				),
+				normal = Vec3(0f, 0f, -1f),
+				color = Vec4(0f, 1f, 0f, 1f),
+				textureCoord = Vec2(
+					x = (-0.5 * cos(angle) + 0.5f).toFloat(),
+					y = (0.5 * sin(angle) + 0.5f).toFloat()
+				)
+			)
+		}
+		val topPolygon = Polygon(topVertice)
+
+
 		offset = num + 1 + 1
 		for (i in 0 until num + 1) { //top
 			val j = i + offset

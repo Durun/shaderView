@@ -1,10 +1,26 @@
 package shaderView.data
 
-data class Polygon(
-    val vertice: List<Vertex>
-) {
+interface PolygonSet {
     val vertexArray: FloatArray
     val elementArray: IntArray
+
+    operator fun plus(other: PolygonSet): PolygonSet {
+        return MultiPolygon(this, other)
+    }
+}
+
+class MultiPolygon(p1: PolygonSet, p2: PolygonSet) : PolygonSet {
+    override val vertexArray: FloatArray = p1.vertexArray + p2.vertexArray
+    override val elementArray: IntArray = p1.elementArray + p2.elementArray.map {
+        it + (p1.vertexArray.size) / 12
+    }
+}
+
+data class Polygon(
+    val vertice: List<Vertex>
+) : PolygonSet {
+    override val vertexArray: FloatArray
+    override val elementArray: IntArray
 
     init {
         val buffer = vertice.distinct()
@@ -29,4 +45,13 @@ data class Polygon(
     companion object {
         fun of(vararg vertice: Vertex): Polygon = Polygon(vertice.toList())
     }
+}
+
+data class Sheet(
+    val vertice: List<Vertex>
+) : PolygonSet {
+    override val vertexArray: FloatArray
+        get() = TODO("Not yet implemented")
+    override val elementArray: IntArray
+        get() = TODO("Not yet implemented")
 }

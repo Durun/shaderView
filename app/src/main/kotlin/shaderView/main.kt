@@ -53,15 +53,18 @@ class AppListener : GLEventListener {
 			add(shader0)
 		}
 
-		objects.add(Plane(gl, loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png")), shaders[0]))
+		objects.add(makePlane(gl, loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png")), shaders[0]))
 		val red = Vec4(1f, 0f, 0f, 1f)
-		objects.add(
-			Cylinder(
-				gl,
-				4, 1f, 1f, false, floatArrayOf(1f, 1f, 1f, 1f), red,
-				listOf(loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))), shaders[0]
-			)
+		val cylinder = Cylinder(
+			gl,
+			4, 0.4f, 0.4f, false, floatArrayOf(1f, 1f, 1f, 1f), red,
+			listOf(loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))), shaders[0]
 		)
+		objects.add(cylinder)
+		objects.add(cylinder)
+		objects.add(cylinder)
+		objects.add(cylinder)
+		objects.add(cylinder)
 		gl.glUseProgram(0)
 	}
 
@@ -83,6 +86,7 @@ class AppListener : GLEventListener {
 			it.displayAt(gl, mats, lightpos, lightcolor) {
 				glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
 				glRotatef(t, 0.3f, 1f, 0f)
+				glRotatef(90f, 1f, 0f, 0f)
 				glRotatef(45f, 0f, 0f, 1f)
 			}
 		}
