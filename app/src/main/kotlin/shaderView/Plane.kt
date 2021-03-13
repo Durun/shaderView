@@ -4,6 +4,7 @@ import com.jogamp.opengl.GL2ES2
 import shaderView.data.*
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 fun makePlane(gl: GL2ES2, texture: TextureImage, shader: Shader): Object3D {
 	val normal = Vec3(0f, 0f, -1f)
@@ -24,7 +25,7 @@ fun PolygonSet.textured(gl: GL2ES2, texture: TextureImage, shader: Shader): Obje
 	return TexturedObject(gl, this, texture, shader)
 }
 
-fun makeCylinder(n: Int, radius: Float, height: Float): PolygonSet {
+fun makeCylinder(n: Int, radius: Float, height: Float, color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f)): PolygonSet {
 	val angles = (0 until n).map { (it * 2 * Math.PI / n) }
 	val topVertices = angles.map { angle ->
 		Vertex(
@@ -34,7 +35,7 @@ fun makeCylinder(n: Int, radius: Float, height: Float): PolygonSet {
 				z = -height / 2f
 			),
 			normal = Vec3(0f, 0f, -1f),
-			color = Vec4(0f, 1f, 0f, 1f),
+			color = color,
 			textureCoord = Vec2(
 				x = (-0.5 * cos(angle) + 0.5f).toFloat(),
 				y = (0.5 * sin(angle) + 0.5f).toFloat()
@@ -50,7 +51,22 @@ fun makeCylinder(n: Int, radius: Float, height: Float): PolygonSet {
 	val top = Polygon(topVertices.asReversed())
 	val bottom = Polygon(bottomVertices)
 	val side = topVertices.zip(bottomVertices)
-		.flatMap { (vTop, vBottom) -> listOf(vTop, vBottom) }
+		.flatMapIndexed { i, (vTop, vBottom) ->
+			val (x, y) = vTop.position
+			val r = sqrt(x * x + y * y)
+			val normal = Vec3(x / r, y / r, 0f)
+			val textureX = if (i < n / 2) 2.0f * i / n else 2.0f * (n - i) / n
+			listOf(
+				vTop.copy(
+					normal = normal,
+					textureCoord = Vec2(textureX, 0f)
+				),
+				vBottom.copy(
+					normal = normal,
+					textureCoord = Vec2(textureX, 1f)
+				)
+			)
+		}
 		.let { Sheet(it, looped = true) }
 	return top + bottom + side
 }
