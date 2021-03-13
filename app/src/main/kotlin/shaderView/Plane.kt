@@ -8,20 +8,19 @@ import com.jogamp.opengl.util.PMVMatrix
 import shaderView.data.*
 
 class Plane(gl: GL2ES2, texture: TextureImage, shader: Shader) : Object3D(shader) {
-	private val vertice = run {
+	private val polygon = run {
 		val normal = Vec3(0f, 0f, -1f)
 		val red = Vec4(1f, 0f, 0f, 1f)
-		listOf(
+		Polygon.of(
 			Vertex(Vec3(-1f, -1f, 0f), normal, red, Vec2(0f, 0f)),
 			Vertex(Vec3(1f, -1f, 0f), normal, red, Vec2(1f, 0f)),
 			Vertex(Vec3(1f, 1f, 0f), normal, red, Vec2(1f, 1f)),
 			Vertex(Vec3(-1f, 1f, 0f), normal, red, Vec2(0f, 1f))
 		)
 	}
-	private val polygon = Polygon(vertice)
 	private val ElementData = polygon.elementArray + polygon.elementArray.reversed()
 	private val elementBufferId = gl.addBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, ElementData)
-	private val vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, vertice.toFloatArray())
+	private val vertexBufferId = gl.addBuffer(GL.GL_ARRAY_BUFFER, polygon.vertexArray)
 	private val textureId = gl.addTexture(GL.GL_TEXTURE0, texture)
 	private val uniformTexture = bindProgram(gl) {
 		val id = glGetUniformLocation(shader.id, "texture0")

@@ -25,4 +25,8 @@ data class Polygon(
         elementArray = triangles.flatten().toIntArray()
         vertexArray = buffer.toFloatArray()
     }
+
+    companion object {
+        fun of(vararg vertice: Vertex): Polygon = Polygon(vertice.toList())
+    }
 }
