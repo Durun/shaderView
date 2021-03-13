@@ -59,7 +59,8 @@ fun makeCylinder(
 		it.copy(
 			position = it.position.copy(z = -it.position.z),
 			normal = -it.normal,
-			tangent = -it.tangent
+			tangent = Vec3(0f, -1f, 0f),
+			textureCoord = it.textureCoord.swapped()
 		)
 	}
 	val top = Polygon(topVertices.asReversed())
