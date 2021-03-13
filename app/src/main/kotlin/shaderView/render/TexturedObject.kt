@@ -40,24 +40,24 @@ class TexturedObject(
 	override fun display(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		bindProgram(gl) {
 			shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
-			//bindTextures(GL2.GL_TEXTURE_2D, textureIds) {
 			textureUniforms.forEachIndexed { i, it ->
 				glActiveTexture(GL.GL_TEXTURE0 + i)
 				glBindTexture(GL2.GL_TEXTURE_2D, textureIds[i])
 				glUniform1i(it, i)
 			}
 			bindBuffer(GL.GL_ARRAY_BUFFER, vertexBufferId) {
-				glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, 48, 0)
-				glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, 48, Vertex.OFFSET_NORMAL.toLong())
-				glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, 48, Vertex.OFFSET_COLOR.toLong())
-				glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, 48, Vertex.OFFSET_TEXCOORD.toLong())
-				//glVertexAttribPointer(VERTEXTANGENT, 3, GL.GL_FLOAT, false, 48, Vertex.OFFSET_TANGENT.toLong())
+				val stride = 60
+				glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, stride, 0)
+				glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, stride, Vertex.OFFSET_NORMAL.toLong())
+				glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, stride, Vertex.OFFSET_COLOR.toLong())
+				glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, stride, Vertex.OFFSET_TEXCOORD.toLong())
+				glVertexAttribPointer(VERTEXTANGENT, 3, GL.GL_FLOAT, false, stride, Vertex.OFFSET_TANGENT.toLong())
 				bindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementBufferId) {
 					glEnableVertexAttribArray(VERTEXPOSITION)
 					glEnableVertexAttribArray(VERTEXCOLOR)
 					glEnableVertexAttribArray(VERTEXNORMAL)
 					glEnableVertexAttribArray(VERTEXTEXCOORD0)
-					//glEnableVertexAttribArray(VERTEXTANGENT)
+					glEnableVertexAttribArray(VERTEXTANGENT)
 
 					glDrawElements(GL.GL_TRIANGLES, elementSize, GL.GL_UNSIGNED_INT, 0)
 
@@ -65,7 +65,7 @@ class TexturedObject(
 					glDisableVertexAttribArray(VERTEXNORMAL)
 					glDisableVertexAttribArray(VERTEXCOLOR)
 					glDisableVertexAttribArray(VERTEXTEXCOORD0)
-					//glDisableVertexAttribArray(VERTEXTANGENT)
+					glDisableVertexAttribArray(VERTEXTANGENT)
 				}
 			}
 		}

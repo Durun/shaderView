@@ -14,6 +14,7 @@ data class Vertex(
 		const val OFFSET_COLOR = 6 * FLOAT_BYTES
 		const val OFFSET_TEXCOORD = 10 * FLOAT_BYTES
 		const val OFFSET_TANGENT = 12 * FLOAT_BYTES
+		const val LENGTH = 15
 	}
 }
 
@@ -32,9 +33,9 @@ fun List<Vertex>.toFloatArray(): FloatArray {
 			it.color.w,
 			it.textureCoord.x,
 			it.textureCoord.y,
-			//it.tangent.x,
-			//it.tangent.y,
-			//it.tangent.z
+			it.tangent.x,
+			it.tangent.y,
+			it.tangent.z
 		)
 	}.toFloatArray()
 }

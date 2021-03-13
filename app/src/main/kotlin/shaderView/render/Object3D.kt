@@ -36,8 +36,8 @@ abstract class Object3D(
 	companion object {
 		const val VERTEXPOSITION = 0
 		const val VERTEXCOLOR = 1
-		const val VERTEXTEXCOORD0 = 3
 		const val VERTEXNORMAL = 2
+		const val VERTEXTEXCOORD0 = 3
 		const val VERTEXTANGENT = 4
 	}
 }
