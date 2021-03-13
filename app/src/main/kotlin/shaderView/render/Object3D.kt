@@ -8,8 +8,6 @@ import shaderView.data.Vec3
 abstract class Object3D(
 	protected val shader: Shader
 ) {
-	private val storedprogramID = IntArray(1)
-
 	abstract fun display(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>)
 
 	fun displayAt(
@@ -27,10 +25,11 @@ abstract class Object3D(
 	}
 
 	fun <R> bindProgram(gl: GL2ES2, block: GL2ES2.() -> R): R {
-		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, storedprogramID, 0)
+		val idBuffer = IntArray(1)
+		gl.glGetIntegerv(GL3.GL_CURRENT_PROGRAM, idBuffer, 0)
 		gl.glUseProgram(shader.id)
 		val result = runCatching { gl.block() }
-		gl.glUseProgram(storedprogramID[0])
+		gl.glUseProgram(idBuffer[0])
 		return result.getOrThrow()
 	}
 
