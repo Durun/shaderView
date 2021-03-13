@@ -8,57 +8,45 @@ import java.nio.ByteBuffer
 interface TextureImage {
 	val width: Int
 	val height: Int
-	val byteBuffer: ByteBuffer?
-
-	fun getByteBufferOfLevel(level: Int): ByteBuffer?
+	val byteBuffer: ByteBuffer
+	fun getByteBufferOfLevel(level: Int): ByteBuffer
 }
 
-internal object TextureImageUtil {
-	fun subsampling(
-		`in`: ByteBuffer, out: ByteBuffer, originalw: Int,
-		originalh: Int, level: Int
-	) {
-		`in`.rewind()
-		out.rewind()
-		val step = 4 * (1 shl level)
-		var y = 0
-		while (y < originalh) {
-			var x = 0
-			while (x < originalw) {
-				val base = (y * originalw + x) * 4
-				out.put(`in`[base])
-				out.put(`in`[base + 1])
-				out.put(`in`[base + 2])
-				out.put(`in`[base + 3])
-				x += 1 shl level
-			}
-			y += 1 shl level
+internal fun ByteBuffer.subSampleTo(output: ByteBuffer, width: Int, height: Int, level: Int) {
+	this.rewind()
+	output.rewind()
+	var y = 0
+	while (y < height) {
+		var x = 0
+		while (x < width) {
+			val base = (y * width + x) * 4
+			output.put(this[base])
+			output.put(this[base + 1])
+			output.put(this[base + 2])
+			output.put(this[base + 3])
+			x += 1 shl level
 		}
-		out.rewind()
-		`in`.rewind()
+		y += 1 shl level
 	}
+	output.rewind()
+	this.rewind()
 }
 
-class DotImage(override val width: Int, override val height: Int) : TextureImage {
-	private val image: BufferedImage
-	private val buff: ByteBuffer
-	private val tmpbuff: ByteBuffer
+internal class DotImage(override val width: Int, override val height: Int) : TextureImage {
+	private val image: BufferedImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+	private val buff: ByteBuffer = ByteBuffer.allocate(height * width * 4)
+	private val tmpbuff: ByteBuffer = ByteBuffer.allocate(height * width * 4)
 
 	override val byteBuffer: ByteBuffer
-		get() {
-			buff.rewind()
-			return buff
-		}
+		get() = buff.apply { rewind() }
 
 	override fun getByteBufferOfLevel(level: Int): ByteBuffer {
-		TextureImageUtil.subsampling(buff, tmpbuff, width, height, level)
+		buff.subSampleTo(tmpbuff, width, height, level)
 		return tmpbuff
 	}
 
 	init {
-		val graphics: Graphics2D
-		image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-		graphics = image.createGraphics()
+		val graphics: Graphics2D = image.createGraphics()
 		for (y in 0 until height) {
 			for (x in 0 until width) {
 				val v = ((1.0 + Math.sin(x / 8.0 * Math.PI)) *
@@ -67,8 +55,6 @@ class DotImage(override val width: Int, override val height: Int) : TextureImage
 				graphics.drawLine(x, y, x, y)
 			}
 		}
-		buff = ByteBuffer.allocate(height * width * 4)
-		tmpbuff = ByteBuffer.allocate(height * width * 4)
 		for (y in 0 until height) {
 			for (x in 0 until width) {
 				buff.putInt(image.getRGB(x, y) shl 8 or 255)
