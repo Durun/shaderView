@@ -31,7 +31,7 @@ class Polygon(vertice: List<Vertex>) : PolygonSet {
                 elements.lastIndex -> null
                 else -> {
                     val next = elements[i + 1]
-                    listOf(elements.first(), v, next)
+                    listOf(elements.first(), next, v)
                 }
             }
         }

@@ -61,18 +61,40 @@ class AppListener : GLEventListener {
 				Path.of("app/src/main/resources/brick.frag")
 			)
 			add(shader1)
+
+			val shader2 = Shader(
+				gl,
+				Path.of("app/src/main/resources/vertex.vert"),
+				Path.of("app/src/main/resources/tangent.frag")
+			)
+			add(shader2)
 		}
 
 		val brickNormal = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
 		val brickDiffuse = loadFileTexture(Path.of("app/src/main/resources/brick.png"))
 		val brickHeight = loadFileTexture(Path.of("app/src/main/resources/brick_h.png"))
 		val brickTextures = listOf(brickNormal, brickDiffuse, brickHeight)
-		objects.add(makePlane(0.5f).textured(gl, listOf(brickNormal), shaders[0]))
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
-		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, brickTextures, shaders[1]))
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
-		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, brickTextures, shaders[1]))
+
+		val rockDiffuse = loadFileTexture(Path.of("app/src/main/resources/hole.png"))
+		val rockHeight = loadFileTexture(Path.of("app/src/main/resources/hole.png"))
+		val rockTextures = listOf(brickNormal, rockDiffuse, rockHeight)
+
+		val plane = makePlane(0.5f).textured(gl, brickTextures, shaders[1])
+		val plane2 = makePlane(0.5f).textured(gl, rockTextures, shaders[2])
+
+		objects.add(plane)
+		objects.add(plane)
+		objects.add(plane2)
+		objects.add(plane2)
+		objects.add(plane)
+		objects.add(plane)
+
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[1]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[1]))
+		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, rockTextures, shaders[1]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[1]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[2]))
+		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, rockTextures, shaders[2]))
 		gl.glUseProgram(0)
 	}
 
@@ -93,7 +115,7 @@ class AppListener : GLEventListener {
 		objects.forEachIndexed { i, it ->
 			it.displayAt(gl, mats, lightpos, lightcolor) {
 				glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
-				glRotatef(t, 0.3f, 1f, 0f)
+				glRotatef(t, 0.4f, 1f, 0f)
 				glRotatef(90f, 1f, 0f, 0f)
 				glRotatef(45f, 0f, 0f, 1f)
 			}

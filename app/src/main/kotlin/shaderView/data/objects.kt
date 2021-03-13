@@ -14,7 +14,13 @@ fun makePlane(sizeX: Float, sizeY: Float = sizeX, color: Vec4<Float> = Vec4(0.5f
 		Vertex(Vec3(-sizeX, sizeY, 0f), normal, color, Vec2(0f, 1f), tangent)
 	)
 	val front = Polygon(vertice)
-	val back = Polygon(vertice.reversed())
+	val back = Polygon(vertice.reversed().map {
+		it.copy(
+			normal = -it.normal,
+			tangent = it.tangent,
+			textureCoord = -it.textureCoord
+		)
+	})
 	return front + back
 }
 

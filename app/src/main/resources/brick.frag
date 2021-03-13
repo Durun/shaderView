@@ -14,6 +14,7 @@ varying vec2 texcoord;
 varying vec3 viewdir;
 varying vec3 lightdir;
 varying vec3 pos;
+varying vec3 tangent;
 
 const float PI = 3.141592653589793;
 const float pi23 = PI/2.0 - 2.0/3.0;
@@ -68,11 +69,12 @@ float sampleHeight(vec2 t) {
 	return texture2D(texture2, t).x;
 }
 
+
 vec2 getUV_BinarySearch(vec2 texCoord, vec3 view) {
 	float height = sampleHeight(texcoord);
 	int resolution = 64;
-	float maxdepth = 0.017;
-	vec3 dv = maxdepth * vec3(view.x, -view.y, abs(view.z)) * abs(view.z);
+	float maxdepth = 0.01;
+	vec3 dv = maxdepth * vec3(view.x, -view.y, view.z);
 
 	vec3 v = vec3(0.0, 0.0, 0.0);
 	vec3 before;
@@ -92,6 +94,28 @@ vec2 getUV_BinarySearch(vec2 texCoord, vec3 view) {
 	  }
 	}
 	return texCoord + before.xy;
+}
+
+vec2 getUV_LinearSearch(vec2 texCoord, vec3 view) {
+	float height = sampleHeight(texcoord);
+	int resolution = 128;
+	float maxdepth = 0.1;
+	vec3 dv = maxdepth * vec3(view.x, -view.y, view.z) / float(resolution);
+
+	vec3 v = vec3(0.0, 0.0, 0.0);
+	for (int i = 0; i < resolution; i++) {
+	  v = v + dv; // v = dv*(i+1)
+	  vec2 t = texCoord + v.xy;
+	  float hRay = 1.0 - v.z;
+	  float hObj = sampleHeight(t);
+	  if (hRay < hObj) break;
+	}
+
+	//test
+	//v = 0.5 * vec3(view.x, -view.y, 0.0);
+	//v = 0.5 * vec3(view.x, 0.0, 0.0);
+
+	return texCoord + v.xy;
 }
 
 vec3 dFdx(sampler2D F, vec2 v) {
@@ -136,12 +160,12 @@ void main (void){
   vec3 v = normalize(viewdir);
 
   // parallax mapping
-  vec2 uv = getUV_BinarySearch(texcoord, v);
+  vec2 uv = getUV_BinarySearch(texcoord, viewdir);
   vec3 bump = sampleBump(texture0, uv);
 
   // vector parameters
   vec3 l = normalize(lightpos - pos);	// Spot light
-  vec3 n = normalize(normal + 0.5*bump);
+  vec3 n = normalize(normal + 0.3*bump);
   vec3 h = (l+v)/2.0;
 
   // wet

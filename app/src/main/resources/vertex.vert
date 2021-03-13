@@ -21,11 +21,14 @@ varying vec3 tangent;
 void main(void)
 {
   normal = normalize((mat[3]*vec4(innormal,1.0)).xyz);
-  tangent = normalize(intangent);
+  tangent = normalize((mat[3]*vec4(intangent,1.0)).xyz);
+  //tangent = normalize(cross(normal, vec3(0.0, 1.0, 0.0)));
   vec3 bitangent = cross(normal, tangent);
   vec3 position = (mat[1]*vec4(inposition,1.0)).xyz;
   //  vec3 tmplightpos = (mat[1]*vec4(lightpos,1.0)).xyz;
   vec3 tmplightpos = lightpos;
+
+
   viewdir = -vec3(dot(position, tangent),
                  dot(position, bitangent),
                  dot(position, normal));

@@ -17,5 +17,11 @@ varying vec3 pos;
 varying vec3 tangent;
 
 void main (void){
-  gl_FragColor = vec4(tangent/2.0+0.5 , 1.0);
+  vec3 bitangent = cross(normal, tangent);
+
+  vec3 view = -vec3(dot(pos, tangent),
+                   dot(pos, bitangent),
+                   dot(pos, normal));
+
+  gl_FragColor = vec4(viewdir/2.0+0.5 , 1.0);
 }
