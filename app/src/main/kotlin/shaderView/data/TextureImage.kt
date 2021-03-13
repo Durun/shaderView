@@ -4,8 +4,6 @@ import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.nio.ByteBuffer
-import java.nio.file.Path
-import javax.imageio.ImageIO
 
 interface TextureImage {
 	val width: Int
@@ -36,15 +34,15 @@ internal fun ByteBuffer.subSampleTo(output: ByteBuffer, width: Int, height: Int,
 
 internal class DotImage(override val width: Int, override val height: Int) : TextureImage {
 	private val image: BufferedImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-	private val buff: ByteBuffer = ByteBuffer.allocate(height * width * 4)
-	private val tmpbuff: ByteBuffer = ByteBuffer.allocate(height * width * 4)
+	private val data: ByteBuffer = ByteBuffer.allocate(height * width * 4)
+	private val buffer: ByteBuffer = ByteBuffer.allocate(height * width * 4)
 
 	override val byteBuffer: ByteBuffer
-		get() = buff.apply { rewind() }
+		get() = data.apply { rewind() }
 
 	override fun getByteBufferOfLevel(level: Int): ByteBuffer {
-		buff.subSampleTo(tmpbuff, width, height, level)
-		return tmpbuff
+		data.subSampleTo(buffer, width, height, level)
+		return buffer
 	}
 
 	init {
@@ -59,37 +57,33 @@ internal class DotImage(override val width: Int, override val height: Int) : Tex
 		}
 		for (y in 0 until height) {
 			for (x in 0 until width) {
-				buff.putInt(image.getRGB(x, y) shl 8 or 255)
+				data.putInt(image.getRGB(x, y) shl 8 or 255)
 			}
 		}
 	}
 }
 
-internal class FileImage(imageFile: Path) : TextureImage {
-	private val data: ByteBuffer
-	override val width: Int
-	override val height: Int
+internal class FileImage(image: BufferedImage) : TextureImage {
+	override val width: Int = image.width
+	override val height: Int = image.height
 	override val byteBuffer: ByteBuffer
 		get() = data.apply { rewind() }
 
 	override fun getByteBufferOfLevel(level: Int): ByteBuffer {
-		data.subSampleTo(tmpdata, width, height, level)
-		return tmpdata
+		data.subSampleTo(buffer, width, height, level)
+		return buffer
 	}
 
+	private val data: ByteBuffer = ByteBuffer.allocate(image.width * image.height * 4)
+	private val buffer = ByteBuffer.allocate(width * height * 4)
+
 	init {
-		val bimage = ImageIO.read(imageFile.toFile())
-		width = bimage.width
-		height = bimage.height
-		data = ByteBuffer.allocate(bimage.width * bimage.height * 4)
 		for (y in 0 until height) {
 			for (x in 0 until width) {
-				val c = bimage.getRGB(x, y)
+				val c = image.getRGB(x, y)
 				data.putInt(c and 0xff0000 shr 8 or (c and 0xff00 shl 8) or (c and 0xff shl 24) or 255)
 			}
 		}
 		data.rewind()
 	}
-
-	private val tmpdata = ByteBuffer.allocate(width * height * 4)
 }
