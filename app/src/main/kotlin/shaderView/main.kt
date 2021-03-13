@@ -64,7 +64,13 @@ class AppListener : GLEventListener {
 		objects.add(cylinder)
 		objects.add(cylinder)
 		objects.add(cylinder)
-		objects.add(cylinder)
+		objects.add(
+			makeRoll().textured(
+				gl,
+				loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png")),
+				shaders[0]
+			)
+		)
 		gl.glUseProgram(0)
 	}
 

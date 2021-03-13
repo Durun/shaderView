@@ -16,9 +16,7 @@ class MultiPolygon(p1: PolygonSet, p2: PolygonSet) : PolygonSet {
     }
 }
 
-data class Polygon(
-    val vertice: List<Vertex>
-) : PolygonSet {
+class Polygon(vertice: List<Vertex>) : PolygonSet {
     override val vertexArray: FloatArray
     override val elementArray: IntArray
 
@@ -37,7 +35,6 @@ data class Polygon(
                 }
             }
         }
-
         elementArray = triangles.flatten().toIntArray()
         vertexArray = buffer.toFloatArray()
     }
@@ -47,11 +44,19 @@ data class Polygon(
     }
 }
 
-data class Sheet(
-    val vertice: List<Vertex>
-) : PolygonSet {
+class Sheet(vertice: List<Vertex>) : PolygonSet {
     override val vertexArray: FloatArray
-        get() = TODO("Not yet implemented")
     override val elementArray: IntArray
-        get() = TODO("Not yet implemented")
+
+    init {
+        val size = vertice.size
+        val triangles = vertice.mapIndexed { i, _ ->
+            val v1 = i
+            val v2 = (if (v1 % 2 == 0) i + 2 else i + 1) % size
+            val v3 = (if (v1 % 2 == 0) i + 1 else i + 2) % size
+            listOf(v1, v2, v3)
+        }
+        elementArray = triangles.flatten().toIntArray()
+        vertexArray = vertice.toFloatArray()
+    }
 }
