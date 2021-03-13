@@ -2,7 +2,6 @@ package shaderView
 
 import com.jogamp.newt.opengl.GLWindow
 import com.jogamp.opengl.GLCapabilities
-import com.jogamp.opengl.GLEventListener
 import com.jogamp.opengl.GLProfile
 import com.jogamp.opengl.util.FPSAnimator
 import kotlin.system.exitProcess
@@ -11,7 +10,7 @@ class AppBase(
     val title: String,
     val width: Int,
     val height: Int,
-    val eventListener: GLEventListener? = null
+    val eventListener: AppListener? = null
 ) {
     fun start() {
         val window = run {
@@ -27,7 +26,11 @@ class AppBase(
                 title = this@AppBase.title
                 setSize(this@AppBase.width, this@AppBase.height)
                 addWindowListener { exitProcess(0) }
-                eventListener?.let { addGLEventListener(it) }
+                eventListener?.let {
+                    addGLEventListener(it)
+                    addMouseListener(it.mouseListener)
+                }
+
             }
         }
 

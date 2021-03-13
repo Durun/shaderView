@@ -8,9 +8,9 @@ data class Vec4<T : Float>(
 )
 
 data class Vec3<T : Float>(
-	val x: T,
-	val y: T,
-	val z: T
+	var x: T,
+	var y: T,
+	var z: T
 ) {
 	operator fun unaryMinus(): Vec3<Float> = Vec3(-x, -y, -z)
 	operator fun plus(other: Vec3<Float>): Vec3<Float> = Vec3(x + other.x, y + other.y, z + other.z)

@@ -1,11 +1,16 @@
 package shaderView
 
+import com.jogamp.newt.event.MouseEvent
+import com.jogamp.newt.event.MouseListener
 import com.jogamp.opengl.GL
 import com.jogamp.opengl.GL2
 import com.jogamp.opengl.GLAutoDrawable
 import com.jogamp.opengl.GLEventListener
 import com.jogamp.opengl.util.PMVMatrix
-import shaderView.data.*
+import shaderView.data.Vec3
+import shaderView.data.Vec4
+import shaderView.data.loadFileTexture
+import shaderView.data.makePlane
 import shaderView.render.Object3D
 import shaderView.render.Shader
 import shaderView.render.textured
@@ -27,6 +32,8 @@ class AppListener : GLEventListener {
 
 	val mats = PMVMatrix()
 	var t = 0f
+	var mouseX: Int = 0
+	var mouseY: Int = 0
 
 	val lightpos = Vec3(0.0f, 0.0f, 30f)
 	val lightcolor = Vec3(1.0000f, 0.9434f, 0.9927f) // D65 light
@@ -68,6 +75,23 @@ class AppListener : GLEventListener {
 				Path.of("app/src/main/resources/tangent.frag")
 			)
 			add(shader2)
+
+			add(
+				Shader(
+					gl,
+					Path.of("app/src/main/resources/vertex.vert"),
+					Path.of("app/src/main/resources/sofa.frag")
+				)
+			)
+
+			add(
+				Shader(
+					gl,
+					Path.of("app/src/main/resources/vertex.vert"),
+					Path.of("app/src/main/resources/copper.frag")
+				)
+			)
+
 		}
 
 		val brickNormal = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
@@ -79,22 +103,27 @@ class AppListener : GLEventListener {
 		val rockHeight = loadFileTexture(Path.of("app/src/main/resources/hole.png"))
 		val rockTextures = listOf(brickNormal, rockDiffuse, rockHeight)
 
+		val sofa = listOf(
+			loadFileTexture(Path.of("app/src/main/resources/sofa_d.png")),
+			loadFileTexture(Path.of("app/src/main/resources/sofa_n.png")),
+			loadFileTexture(Path.of("app/src/main/resources/sofa_hmr.png"))
+		)
+
+		val copper = listOf(
+			loadFileTexture(Path.of("app/src/main/resources/10yen_n.png")),
+			loadFileTexture(Path.of("app/src/main/resources/10yen_h.png"))
+		)
+
 		val plane = makePlane(0.5f).textured(gl, brickTextures, shaders[1])
 		val plane2 = makePlane(0.5f).textured(gl, rockTextures, shaders[2])
+		val plane3 = makePlane(0.5f).textured(gl, rockTextures, shaders[1])
 
-		objects.add(plane)
-		objects.add(plane)
+		objects.add(makePlane(0.5f, color = Vec4(0.4f, 0.2f, 0.2f, 1f)).textured(gl, brickTextures, shaders[1]))
 		objects.add(plane2)
-		objects.add(plane2)
-		objects.add(plane)
-		objects.add(plane)
+		objects.add(plane3)
+		objects.add(makePlane(0.5f, texScale = 0.4f).textured(gl, sofa, shaders[3]))
+		objects.add(makePlane(0.5f, texScale = 2f).textured(gl, copper, shaders[4]))
 
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[1]))
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[1]))
-		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, rockTextures, shaders[1]))
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[1]))
-		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, rockTextures, shaders[2]))
-		objects.add(makeCylinder(32, 0.5f, 0.5f, smooth = true).textured(gl, rockTextures, shaders[2]))
 		gl.glUseProgram(0)
 	}
 
@@ -111,11 +140,14 @@ class AppListener : GLEventListener {
 		mats.glLoadIdentity()
 		mats.glTranslatef(0f, 0f, -4.0f)
 
+		lightpos.x = (mouseX - width).toFloat() / 10
 
 		objects.forEachIndexed { i, it ->
 			it.displayAt(gl, mats, lightpos, lightcolor) {
 				glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
-				glRotatef(t, 0.4f, 1f, 0f)
+				//glRotatef(t, 0.4f, 1f, 0f)
+				glRotatef(mouseY.toFloat(), 1f, 0f, 0f)
+				glRotatef(mouseX.toFloat(), 0f, 1f, 0f)
 				glRotatef(90f, 1f, 0f, 0f)
 				glRotatef(45f, 0f, 0f, 1f)
 			}
@@ -126,4 +158,22 @@ class AppListener : GLEventListener {
 
 	override fun dispose(drawable: GLAutoDrawable?) {}
 	override fun reshape(drawable: GLAutoDrawable?, x: Int, y: Int, width: Int, height: Int) {}
+
+
+	val mouseListener: MouseListener = AppMouseListener()
+
+	inner class AppMouseListener : MouseListener {
+		override fun mouseDragged(e: MouseEvent) {
+			mouseX = e.x
+			mouseY = e.y
+		}
+
+		override fun mouseClicked(e: MouseEvent?) {}
+		override fun mouseEntered(e: MouseEvent?) {}
+		override fun mouseExited(e: MouseEvent?) {}
+		override fun mousePressed(e: MouseEvent?) {}
+		override fun mouseReleased(e: MouseEvent?) {}
+		override fun mouseMoved(e: MouseEvent?) {}
+		override fun mouseWheelMoved(e: MouseEvent?) {}
+	}
 }

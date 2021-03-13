@@ -4,14 +4,20 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-fun makePlane(sizeX: Float, sizeY: Float = sizeX, color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f)): PolygonSet {
+
+fun makePlane(
+	sizeX: Float,
+	sizeY: Float = sizeX,
+	texScale: Float = 1f,
+	color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f)
+): PolygonSet {
 	val normal = Vec3(0f, 0f, -1f)
 	val tangent = Vec3(-1f, 0f, 0f)
 	val vertice = listOf(
 		Vertex(Vec3(-sizeX, -sizeY, 0f), normal, color, Vec2(0f, 0f), tangent),
-		Vertex(Vec3(sizeX, -sizeY, 0f), normal, color, Vec2(1f, 0f), tangent),
-		Vertex(Vec3(sizeX, sizeY, 0f), normal, color, Vec2(1f, 1f), tangent),
-		Vertex(Vec3(-sizeX, sizeY, 0f), normal, color, Vec2(0f, 1f), tangent)
+		Vertex(Vec3(sizeX, -sizeY, 0f), normal, color, Vec2(texScale, 0f), tangent),
+		Vertex(Vec3(sizeX, sizeY, 0f), normal, color, Vec2(texScale, texScale), tangent),
+		Vertex(Vec3(-sizeX, sizeY, 0f), normal, color, Vec2(0f, texScale), tangent)
 	)
 	val front = Polygon(vertice)
 	val back = Polygon(vertice.reversed().map {
@@ -21,7 +27,8 @@ fun makePlane(sizeX: Float, sizeY: Float = sizeX, color: Vec4<Float> = Vec4(0.5f
 			textureCoord = -it.textureCoord
 		)
 	})
-	return front + back
+
+	return front// + back
 }
 
 fun makeCylinder(

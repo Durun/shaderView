@@ -73,7 +73,7 @@ float sampleHeight(vec2 t) {
 vec2 getUV_BinarySearch(vec2 texCoord, vec3 view) {
 	float height = sampleHeight(texcoord);
 	int resolution = 64;
-	float maxdepth = 0.01;
+	float maxdepth = 0.008;
 	vec3 dv = maxdepth * vec3(view.x, -view.y, view.z);
 
 	vec3 v = vec3(0.0, 0.0, 0.0);
