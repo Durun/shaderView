@@ -17,7 +17,13 @@ fun makePlane(sizeX: Float, sizeY: Float = sizeX, color: Vec4<Float> = Vec4(0.5f
 	return front + back
 }
 
-fun makeCylinder(n: Int, radius: Float, height: Float, color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f)): PolygonSet {
+fun makeCylinder(
+	n: Int,
+	radius: Float,
+	height: Float,
+	color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f),
+	smooth: Boolean = false
+): PolygonSet {
 	val angles = (0 until n).map { (it * 2 * Math.PI / n) }
 	val topVertices = angles.map { angle ->
 		Vertex(
@@ -42,23 +48,47 @@ fun makeCylinder(n: Int, radius: Float, height: Float, color: Vec4<Float> = Vec4
 	}
 	val top = Polygon(topVertices.asReversed())
 	val bottom = Polygon(bottomVertices)
-	val side = topVertices.zip(bottomVertices)
-		.flatMapIndexed { i, (vTop, vBottom) ->
-			val (x, y) = vTop.position
-			val r = sqrt(x * x + y * y)
-			val normal = Vec3(x / r, y / r, 0f)
-			val textureX = if (i < n / 2) 2.0f * i / n else 2.0f * (n - i) / n
-			listOf(
-				vTop.copy(
-					normal = normal,
-					textureCoord = Vec2(textureX, 0f)
-				),
-				vBottom.copy(
-					normal = normal,
-					textureCoord = Vec2(textureX, 1f)
+	val side = if (smooth) {
+		topVertices.zip(bottomVertices)
+			.flatMapIndexed { i, (vTop, vBottom) ->
+				val (x, y) = vTop.position
+				val r = sqrt(x * x + y * y)
+				val normal = Vec3(x / r, y / r, 0f)
+				val textureX = if (i < n / 2) 2.0f * i / n else 2.0f * (n - i) / n
+				listOf(
+					vTop.copy(
+						normal = normal,
+						textureCoord = Vec2(textureX, 0f)
+					),
+					vBottom.copy(
+						normal = normal,
+						textureCoord = Vec2(textureX, 1f)
+					)
 				)
-			)
-		}
-		.let { Sheet(it, looped = true) }
+			}
+			.let { Sheet(it, looped = true) }
+	} else {
+		topVertices
+			.mapIndexed { i, _ ->
+				val nextI = (i + 1) % n
+				val v1 = topVertices[i]
+				val v2 = topVertices[nextI]
+				val v3 = bottomVertices[nextI]
+				val v4 = bottomVertices[i]
+				val (x, y) = (v1.position + v4.position) / 2f
+				val r = sqrt(x * x + y * y)
+				val normal = Vec3(x / r, y / r, 0f)
+				val polygon: PolygonSet = Polygon(
+					listOf(
+						v1.copy(normal = normal),
+						v2.copy(normal = normal),
+						v3.copy(normal = normal),
+						v4.copy(normal = normal),
+					)
+				)
+				polygon
+			}
+			.reduce { acc, polygon -> acc + polygon }
+	}
 	return top + bottom + side
 }

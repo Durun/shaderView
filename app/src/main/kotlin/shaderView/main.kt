@@ -58,32 +58,21 @@ class AppListener : GLEventListener {
 			val shader1 = Shader(
 				gl,
 				Path.of("app/src/main/resources/vertex.vert"),
-				Path.of("app/src/main/resources/brick.frag")
+				Path.of("app/src/main/resources/tangent.frag")
 			)
 			add(shader1)
 		}
 
 		val brickNormal = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
-		val brickTexture = loadFileTexture(Path.of("app/src/main/resources/brick.png"))
+		val brickDiffuse = loadFileTexture(Path.of("app/src/main/resources/brick.png"))
 		val brickHeight = loadFileTexture(Path.of("app/src/main/resources/brick_h.png"))
+		val brickTextures = listOf(brickNormal, brickDiffuse, brickHeight)
 		objects.add(makePlane(0.5f).textured(gl, listOf(brickNormal), shaders[0]))
-		objects.add(
-			makeCylinder(4, 0.3f, 0.3f).textured(
-				gl,
-				listOf(brickNormal, brickTexture, brickHeight),
-				shaders[1]
-			)
-		)
-		objects.add(makeCylinder(6, 0.3f, 0.3f).textured(gl, listOf(brickNormal), shaders[0]))
-		objects.add(makeCylinder(32, 0.3f, 0.3f).textured(gl, listOf(brickNormal), shaders[0]))
-		objects.add(
-			makeCylinder(4, 0.5f, 0.5f).textured(
-				gl,
-				listOf(brickNormal, brickTexture, brickHeight),
-				shaders[1]
-			)
-		)
-		objects.add(makeCylinder(3, 0.3f, 0.3f).textured(gl, listOf(brickNormal), shaders[0]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
+		objects.add(makeCylinder(32, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
+		objects.add(makeCylinder(4, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
+		objects.add(makeCylinder(32, 0.5f, 0.5f).textured(gl, brickTextures, shaders[1]))
 		gl.glUseProgram(0)
 	}
 

@@ -13,6 +13,8 @@ data class Vec3<T : Float>(
 	val z: T
 ) {
 	operator fun unaryMinus(): Vec3<Float> = Vec3(-x, -y, -z)
+	operator fun plus(other: Vec3<Float>): Vec3<Float> = Vec3(x + other.x, y + other.y, z + other.z)
+	operator fun div(other: Float): Vec3<Float> = Vec3(x / other, y / other, z / other)
 }
 
 data class Vec2<T : Float>(
