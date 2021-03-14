@@ -72,7 +72,7 @@ float sampleHeight(vec2 t) {
 
 vec2 getUV_BinarySearch(vec2 texCoord, vec3 view) {
 	float height = sampleHeight(texcoord);
-	int resolution = 10;
+	int resolution = 64;
 	float maxdepth = 0.008;
 	vec3 dv = maxdepth * vec3(view.x, -view.y, view.z);
 
@@ -165,14 +165,15 @@ void main (void){
 
   // vector parameters
   vec3 l = normalize(lightpos - pos);	// Spot light
-  vec3 n = normalize(normal + 0.4*bump);
+  vec3 n = normalize(normal + 0.3*bump);
   vec3 h = (l+v)/2.0;
 
   // wet
-  vec2 dfdx = abs(dFdx(texture0, uv).xy);
-  vec2 dfdy = abs(dFdy(texture0, uv).xy);
-  float d = max(max(dfdx.x,dfdx.y),max(dfdy.x,dfdy.y));
-  float wet = 1.0-d*0.01;
+  //vec2 dfdx = dFdx(texture2, uv);
+  //vec2 dfdy = dFdy(texture2, uv);
+  //float d = dfdx;
+  float wet = 0.0;
+  gl_FragColor = vec4(dFdx(texture2, uv)/2.0+0.5, 1.0);
 
   // color parameters
   float brightness = texture2D(texture1, uv).x * 0.5 + 0.5;
@@ -189,5 +190,5 @@ void main (void){
    					  + 0.3*specular
                       + 0.1*ambient;
 
-  gl_FragColor = vec4(reflection, 1.0);
+  //gl_FragColor = vec4(reflection, 1.0);
 }

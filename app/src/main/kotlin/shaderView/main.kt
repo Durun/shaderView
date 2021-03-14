@@ -9,10 +9,7 @@ import com.jogamp.opengl.GL2
 import com.jogamp.opengl.GLAutoDrawable
 import com.jogamp.opengl.GLEventListener
 import com.jogamp.opengl.util.PMVMatrix
-import shaderView.data.Vec3
-import shaderView.data.Vec4
-import shaderView.data.loadFileTexture
-import shaderView.data.makePlane
+import shaderView.data.*
 import shaderView.render.Object3D
 import shaderView.render.Shader
 import shaderView.render.textured
@@ -37,7 +34,7 @@ class AppListener : GLEventListener {
 	var mouseX: Int = width / 2
 	var mouseY: Int = height / 2
 
-	val lightpos = Vec3(0.0f, 0.0f, 30f)
+	val lightpos = Vec3(0.0f, 0.0f, 10f)
 	val lightcolor = Vec3(1.0000f, 0.9434f, 0.9927f) // D65 light
 
 	override fun init(drawable: GLAutoDrawable) {
@@ -103,14 +100,14 @@ class AppListener : GLEventListener {
 			)
 		}
 
-		val brickNormal = loadFileTexture(Path.of("app/src/main/resources/BrickNormalMap.png"))
+		val brickNormal = loadFileTexture(Path.of("app/src/main/resources/brick_n.png"))
 		val brickDiffuse = loadFileTexture(Path.of("app/src/main/resources/brick.png"))
 		val brickHeight = loadFileTexture(Path.of("app/src/main/resources/brick_h.png"))
 		val brickTextures = listOf(brickNormal, brickDiffuse, brickHeight)
 
 		val rockDiffuse = loadFileTexture(Path.of("app/src/main/resources/rock_d.png"))
 		val rockHeight = loadFileTexture(Path.of("app/src/main/resources/rock_h.png"))
-		val rockTextures = listOf(brickNormal, rockDiffuse, rockHeight)
+		val rockTextures = listOf(brickNormal, rockDiffuse, brickHeight)
 
 		val sofa = listOf(
 			loadFileTexture(Path.of("app/src/main/resources/sofa_d.png")),
@@ -137,6 +134,15 @@ class AppListener : GLEventListener {
 		objects.add(makePlane(1.3f, texScale = 2f).textured(gl, copper, shaders[4]))
 		objects.add(makePlane(1.3f).textured(gl, wood, shaders[5]))
 
+
+		objects.add(
+			makeCylinder(4, 1.3f, 1f, color = Vec4(0.4f, 0.2f, 0.2f, 1f)).textured(
+				gl,
+				brickTextures,
+				shaders[1]
+			)
+		)
+
 		gl.glUseProgram(0)
 	}
 
@@ -152,20 +158,6 @@ class AppListener : GLEventListener {
 		mats.glMatrixMode(GL2.GL_MODELVIEW)
 		mats.glLoadIdentity()
 		mats.glTranslatef(0f, 0f, -4.0f)
-
-		//lightpos.x = (mouseX - width).toFloat() / 10
-
-		/*
-		objects.forEachIndexed { i, it ->
-			it.displayAt(gl, mats, lightpos, lightcolor) {
-				glTranslatef(i % 3 - 1f, 0.7f - i / 3 * 1.4f, 0f)
-				glRotatef(mouseY.toFloat(), 1f, 0f, 0f)
-				glRotatef(mouseX.toFloat(), 0f, 1f, 0f)
-				glRotatef(90f, 1f, 0f, 0f)
-				glRotatef(45f, 0f, 0f, 1f)
-			}
-		}
-		*/
 
 		objects[select].displayAt(gl, mats, lightpos, lightcolor) {
 			glRotatef((mouseY - height / 2).toFloat() + 45, 1f, 0f, 0f)
@@ -206,7 +198,7 @@ class AppListener : GLEventListener {
 		override fun keyPressed(e: KeyEvent) {
 			when (e.keyCode) {
 				KeyEvent.VK_LEFT -> {
-					select = (select - 1) % objects.size
+					select = (select + objects.size - 1) % objects.size
 				}
 				KeyEvent.VK_RIGHT -> {
 					select = (select + 1) % objects.size

@@ -79,7 +79,7 @@ float sampleRoughness(vec2 t) {
 vec2 getUV_LinearSearch(vec2 texCoord, vec3 view) {
 	float height = sampleHeight(texcoord);
 	int resolution = 128;
-	float maxdepth = 0.1;
+	float maxdepth = 0.02;
 	vec3 dv = maxdepth * vec3(view.x, -view.y, abs(view.z)) * abs(view.z) / float(resolution);
 
 	vec3 v = vec3(0.0, 0.0, 0.0);

@@ -38,7 +38,7 @@ fun makeCylinder(
 	color: Vec4<Float> = Vec4(0.5f, 0.5f, 0.5f, 1f),
 	smooth: Boolean = false
 ): PolygonSet {
-	val angles = (0 until n).map { (it * 2 * Math.PI / n) }
+	val angles = (0 until n).map { -(it * 2 * Math.PI / n) }
 	val topVertices = angles.map { angle ->
 		Vertex(
 			position = Vec3(
@@ -51,15 +51,15 @@ fun makeCylinder(
 			textureCoord = Vec2(
 				x = (-0.5 * cos(angle) + 0.5f).toFloat(),
 				y = (0.5 * sin(angle) + 0.5f).toFloat()
-			),
-			tangent = Vec3(-1f, 0f, 0f)
+			).swapped(),
+			tangent = Vec3(0f, -1f, 0f)
 		)
 	}
 	val bottomVertices = topVertices.map {
 		it.copy(
 			position = it.position.copy(z = -it.position.z),
 			normal = -it.normal,
-			tangent = Vec3(0f, -1f, 0f),
+			tangent = Vec3(1f, 0f, 0f),
 			textureCoord = it.textureCoord.swapped()
 		)
 	}
@@ -98,7 +98,7 @@ fun makeCylinder(
 				val (x, y) = (v1.position + v4.position) / 2f
 				val r = sqrt(x * x + y * y)
 				val normal = Vec3(x / r, y / r, 0f)
-				val tangent = Vec3(y / r, -x / r, 0f)
+				val tangent = Vec3(-y / r, x / r, 0f)
 				val textureX = if (i < n / 2) 2.0f * i / n else 2.0f * (n - i) / n
 				val nextTextureX = if (nextI < n / 2) 2.0f * nextI / n else 2.0f * (n - nextI) / n
 				val polygon: PolygonSet = Polygon(

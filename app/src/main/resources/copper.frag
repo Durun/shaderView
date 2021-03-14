@@ -100,15 +100,15 @@ void main (void){
   // color parameters
   vec3 diffuseColor = color.xyz;
   vec3 specularColor = vec3(0.60, 0.33, 0.27);
-  float roughness = 0.6;
+  float roughness = 0.5;
 
   // reflections
   vec3 diffuse = OrenNayar(n,l,v, roughness) *diffuseColor*lightcolor;
   vec3 specular = F_Schlick(specularColor, l, h) * G_Smith(n,l,v, roughness) / (4.0*dot(l,n)*dot(v,n)) * D_GGX(n,h, roughness);
   vec3 ambient = diffuseColor*lightcolor;
 
-  vec3 reflection =   0.1*diffuse
+  vec3 reflection =   0.2*diffuse
   					+ 6.0*specular
-  					+ 0.2*ambient;
+  					+ 0.05*ambient;
   gl_FragColor = vec4(reflection, 1.0);
 }
