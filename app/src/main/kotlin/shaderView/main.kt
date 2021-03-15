@@ -43,7 +43,7 @@ class AppListener : GLEventListener {
 
 		// Clear color buffer with black
 		gl.apply {
-			bgColor.let { (r, g, b, a) -> glClearColor(r, g, b, a) }
+			lightcolor.let { (r, g, b) -> glClearColor(r, g, b, 1f) }
 			glClearDepth(1.0)
 			glClear(GL.GL_COLOR_BUFFER_BIT or GL.GL_DEPTH_BUFFER_BIT)
 			glEnable(GL2.GL_DEPTH_TEST)
@@ -56,8 +56,8 @@ class AppListener : GLEventListener {
 		shaders.apply {
 			val shader0 = Shader(
 				gl,
-				Path.of("app/src/main/resources/simple.vert"),
-				Path.of("app/src/main/resources/simple.frag")
+				Path.of("app/src/main/resources/vertex.vert"),
+				Path.of("app/src/main/resources/edge.frag")
 			)
 			add(shader0)
 
@@ -98,6 +98,14 @@ class AppListener : GLEventListener {
 					Path.of("app/src/main/resources/wood.frag")
 				)
 			)
+
+			add(
+				Shader(
+					gl,
+					Path.of("app/src/main/resources/vertex.vert"),
+					Path.of("app/src/main/resources/chalk.frag")
+				)
+			)
 		}
 
 		val brickNormal = loadFileTexture(Path.of("app/src/main/resources/brick_n.png"))
@@ -116,8 +124,8 @@ class AppListener : GLEventListener {
 		)
 
 		val copper = listOf(
-			loadFileTexture(Path.of("app/src/main/resources/10yen_n.png")),
-			loadFileTexture(Path.of("app/src/main/resources/10yen_h.png"))
+			loadFileTexture(Path.of("app/src/main/resources/copper_n2.png")),
+			loadFileTexture(Path.of("app/src/main/resources/copper_h2.png"))
 		)
 
 		val wood = listOf(
@@ -128,6 +136,8 @@ class AppListener : GLEventListener {
 
 		val plane3 = makePlane(1.3f).textured(gl, rockTextures, shaders[1])
 
+
+		objects.add(makePlane(1.3f, color = Vec4(0.4f, 0.2f, 0.2f, 1f)).textured(gl, brickTextures, shaders[0]))
 		objects.add(makePlane(1.3f, color = Vec4(0.4f, 0.2f, 0.2f, 1f)).textured(gl, brickTextures, shaders[1]))
 		objects.add(plane3)
 		objects.add(makePlane(1.3f, texScale = 0.4f).textured(gl, sofa, shaders[3]))
@@ -139,7 +149,7 @@ class AppListener : GLEventListener {
 			makeCylinder(4, 1.3f, 1f, color = Vec4(0.4f, 0.2f, 0.2f, 1f)).textured(
 				gl,
 				brickTextures,
-				shaders[1]
+				shaders[6]
 			)
 		)
 
