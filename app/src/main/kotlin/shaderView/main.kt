@@ -23,7 +23,6 @@ class AppListener : GLEventListener {
 	companion object {
 		val width = 480
 		val height = 320
-		val bgColor = Vec4(0.5f, 0.5f, 0.5f, 1f)
 	}
 
 	val shaders: MutableList<Shader> = mutableListOf()
