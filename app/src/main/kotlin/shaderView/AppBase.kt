@@ -9,8 +9,7 @@ import kotlin.system.exitProcess
 class AppBase(
     val title: String,
     val width: Int,
-    val height: Int,
-    val eventListener: AppListener? = null
+    val height: Int
 ) {
     val window: GLWindow = run {
         val profile = runCatching { GLProfile.get(GLProfile.GL3) }
@@ -25,16 +24,16 @@ class AppBase(
             title = this@AppBase.title
             setSize(this@AppBase.width, this@AppBase.height)
             addWindowListener { exitProcess(0) }
-            eventListener?.let {
-                addGLEventListener(it)
-                addMouseListener(it.mouseListener)
-                addKeyListener(it.keyListener)
-            }
-
         }
     }
 
-    fun start() {
+    fun start(listener: AppListener) {
+        window.apply {
+            addGLEventListener(listener)
+            addMouseListener(listener.mouseListener)
+            addKeyListener(listener.keyListener)
+        }
+
         window.isVisible = true
 
         val animator = FPSAnimator(window, 60)
