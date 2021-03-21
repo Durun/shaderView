@@ -37,9 +37,9 @@ class TexturedObject(
 		}
 	}
 
-	override fun display(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
+	override fun display(gl: GL2ES2, mats: PMVMatrix, lightPos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		bindProgram(gl) {
-			shader.setMatrixAndLight(gl, mats, lightpos, lightcolor)
+			shader.setMatrixAndLight(gl, mats, lightPos, lightcolor)
 			textureUniforms.forEachIndexed { i, it ->
 				glActiveTexture(GL.GL_TEXTURE0 + i)
 				glBindTexture(GL2.GL_TEXTURE_2D, textureIds[i])
@@ -47,13 +47,13 @@ class TexturedObject(
 			}
 			bindBuffer(GL.GL_ARRAY_BUFFER, vertexBufferId) {
 				val stride = 60
-				glVertexAttribPointer(VERTEXPOSITION, 3, GL.GL_FLOAT, false, stride, 0)
+				glVertexAttribPointer(VERTEXPosITION, 3, GL.GL_FLOAT, false, stride, 0)
 				glVertexAttribPointer(VERTEXNORMAL, 3, GL.GL_FLOAT, false, stride, Vertex.OFFSET_NORMAL.toLong())
 				glVertexAttribPointer(VERTEXCOLOR, 4, GL.GL_FLOAT, false, stride, Vertex.OFFSET_COLOR.toLong())
 				glVertexAttribPointer(VERTEXTEXCOORD0, 2, GL.GL_FLOAT, false, stride, Vertex.OFFSET_TEXCOORD.toLong())
 				glVertexAttribPointer(VERTEXTANGENT, 3, GL.GL_FLOAT, false, stride, Vertex.OFFSET_TANGENT.toLong())
 				bindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementBufferId) {
-					glEnableVertexAttribArray(VERTEXPOSITION)
+					glEnableVertexAttribArray(VERTEXPosITION)
 					glEnableVertexAttribArray(VERTEXCOLOR)
 					glEnableVertexAttribArray(VERTEXNORMAL)
 					glEnableVertexAttribArray(VERTEXTEXCOORD0)
@@ -61,7 +61,7 @@ class TexturedObject(
 
 					glDrawElements(GL.GL_TRIANGLES, elementSize, GL.GL_UNSIGNED_INT, 0)
 
-					glDisableVertexAttribArray(VERTEXPOSITION)
+					glDisableVertexAttribArray(VERTEXPosITION)
 					glDisableVertexAttribArray(VERTEXNORMAL)
 					glDisableVertexAttribArray(VERTEXCOLOR)
 					glDisableVertexAttribArray(VERTEXTEXCOORD0)

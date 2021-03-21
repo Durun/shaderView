@@ -6,13 +6,13 @@ uniform mat4 mat[4];
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
-uniform vec3 lightpos;
+uniform vec3 lightPos;
 uniform vec3 lightcolor;
 varying vec3 normal;
 varying vec4 color;
 varying vec2 texcoord;
-varying vec3 viewdir;
-varying vec3 lightdir;
+varying vec3 viewDir;
+varying vec3 lightDir;
 varying vec3 pos;
 varying vec3 tangent;
 
@@ -157,14 +157,14 @@ vec3 dFdy(sampler2D F, vec2 v) {
 
 void main (void){
   // view vector
-  vec3 v = normalize(viewdir);
+  vec3 v = normalize(viewDir);
 
   // parallax mapping
-  vec2 uv = getUV_BinarySearch(texcoord, viewdir);
+  vec2 uv = getUV_BinarySearch(texcoord, viewDir);
   vec3 bump = sampleBump(texture0, uv);
 
   // vector parameters
-  vec3 l = normalize(lightpos - pos);	// Spot light
+  vec3 l = normalize(lightPos - pos);	// Spot light
   vec3 n = normalize(normal + 0.4*bump);
   vec3 h = (l+v)/2.0;
 

@@ -33,7 +33,7 @@ class AppListener : GLEventListener {
 	var mouseX: Int = width / 2
 	var mouseY: Int = height / 2
 
-	val lightpos = Vec3(0.0f, 0.0f, 10f)
+	val lightPos = Vec3(0.0f, 0.0f, 10f)
 	val lightcolor = Vec3(1.0000f, 0.9434f, 0.9927f) // D65 light
 
 	override fun init(drawable: GLAutoDrawable) {
@@ -168,7 +168,7 @@ class AppListener : GLEventListener {
 		mats.glLoadIdentity()
 		mats.glTranslatef(0f, 0f, -4.0f)
 
-		objects[select].displayAt(gl, mats, lightpos, lightcolor) {
+		objects[select].displayAt(gl, mats, lightPos, lightcolor) {
 			glRotatef((mouseY - height / 2).toFloat() + 45, 1f, 0f, 0f)
 			glRotatef((mouseX - width / 2).toFloat(), 0f, 1f, 0f)
 			glRotatef(90f, 1f, 0f, 0f)

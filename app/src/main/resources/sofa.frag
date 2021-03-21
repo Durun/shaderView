@@ -6,12 +6,12 @@ uniform mat4 mat[4];
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
-uniform vec3 lightpos;
+uniform vec3 lightPos;
 uniform vec3 lightcolor;
 varying vec3 normal;
 varying vec2 texcoord;
-varying vec3 viewdir;
-varying vec3 lightdir;
+varying vec3 viewDir;
+varying vec3 lightDir;
 varying vec3 pos;
 
 const float PI = 3.141592653589793;
@@ -96,14 +96,14 @@ vec2 getUV_LinearSearch(vec2 texCoord, vec3 view) {
 
 void main (void){
   // view vector
-  vec3 v = normalize(viewdir);
+  vec3 v = normalize(viewDir);
 
   // parallax mapping
   vec2 uv = getUV_LinearSearch(texcoord, v);
   vec3 bump = sampleBump(uv);
 
   // vector parameters
-  vec3 l = normalize(lightpos - pos);	// Spot light
+  vec3 l = normalize(lightPos - pos);	// Spot light
   vec3 n = normalize(normal + 3.0*bump);
   vec3 h = (l+v)/2.0;
 

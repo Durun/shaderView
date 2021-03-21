@@ -8,19 +8,19 @@ import shaderView.data.Vec3
 abstract class Object3D(
 	protected val shader: Shader
 ) {
-	abstract fun display(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>)
+	abstract fun display(gl: GL2ES2, mats: PMVMatrix, lightPos: Vec3<Float>, lightcolor: Vec3<Float>)
 
 	fun displayAt(
 		gl: GL2ES2,
 		mats: PMVMatrix,
-		lightpos: Vec3<Float>,
+		lightPos: Vec3<Float>,
 		lightcolor: Vec3<Float>,
 		translate: PMVMatrix.() -> Unit
 	) {
 		mats.glPushMatrix()
 		mats.translate()
 		mats.update()
-		display(gl, mats, lightpos, lightcolor)
+		display(gl, mats, lightPos, lightcolor)
 		mats.glPopMatrix()
 	}
 
@@ -34,7 +34,7 @@ abstract class Object3D(
 	}
 
 	companion object {
-		const val VERTEXPOSITION = 0
+		const val VERTEXPosITION = 0
 		const val VERTEXCOLOR = 1
 		const val VERTEXNORMAL = 2
 		const val VERTEXTEXCOORD0 = 3

@@ -21,11 +21,11 @@ class Shader(gl: GL2ES2, vshaderfile: Path, fshaderfile: Path) {
 		gl.apply {
 			attachShader(id, GL2GL3.GL_VERTEX_SHADER, vertexShaderSrc)
 			attachShader(id, GL2GL3.GL_FRAGMENT_SHADER, fragmentShaderSrc)
-			glBindAttribLocation(id, Object3D.VERTEXPOSITION, "inposition")
-			glBindAttribLocation(id, Object3D.VERTEXCOLOR, "incolor")
-			glBindAttribLocation(id, Object3D.VERTEXNORMAL, "innormal")
-			glBindAttribLocation(id, Object3D.VERTEXTEXCOORD0, "intexcoord0")
-			glBindAttribLocation(id, Object3D.VERTEXTANGENT, "intangent")
+			glBindAttribLocation(id, Object3D.VERTEXPosITION, "inPosition")
+			glBindAttribLocation(id, Object3D.VERTEXCOLOR, "inColor")
+			glBindAttribLocation(id, Object3D.VERTEXNORMAL, "inNormal")
+			glBindAttribLocation(id, Object3D.VERTEXTEXCOORD0, "inTexCoord0")
+			glBindAttribLocation(id, Object3D.VERTEXTANGENT, "inTangent")
 			link()
 		}
 	}
@@ -36,13 +36,13 @@ class Shader(gl: GL2ES2, vshaderfile: Path, fshaderfile: Path) {
 		glGetProgramiv(id, GL2ES2.GL_LINK_STATUS, linkStatus, 0)
 		check(linkStatus[0] == GL.GL_TRUE) { "Link error: ${getProgramInfoLogString(id)}" }
 		uniformMat = glGetUniformLocation(id, "mat")
-		uniformLightPos = glGetUniformLocation(id, "lightpos")
+		uniformLightPos = glGetUniformLocation(id, "lightPos")
 		uniformLightColor = glGetUniformLocation(id, "lightcolor")
 	}
 
-	fun setMatrixAndLight(gl: GL2ES2, mats: PMVMatrix, lightpos: Vec3<Float>, lightcolor: Vec3<Float>) {
+	fun setMatrixAndLight(gl: GL2ES2, mats: PMVMatrix, lightPos: Vec3<Float>, lightcolor: Vec3<Float>) {
 		gl.glUniformMatrix4fv(uniformMat, 4, false, mats.glGetPMvMvitMatrixf())
-		lightpos.let { (x, y, z) -> gl.glUniform3f(uniformLightPos, x, y, z) }
+		lightPos.let { (x, y, z) -> gl.glUniform3f(uniformLightPos, x, y, z) }
 		lightcolor.let { (r, g, b) -> gl.glUniform3f(uniformLightColor, r, g, b) }
 	}
 }

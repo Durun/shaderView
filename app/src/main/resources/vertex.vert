@@ -3,44 +3,44 @@
 // simple.vert
 //
 //invariant gl_Position; // invariant out gl_Position; //for #version 130
-attribute vec3 inposition;//in vec3 position;          //for #version 130
-attribute vec4 incolor;
-attribute vec3 innormal;
-attribute vec2 intexcoord0;
-attribute vec3 intangent;
+attribute vec3 inPosition;//in vec3 position;          //for #version 130
+attribute vec4 inColor;
+attribute vec3 inNormal;
+attribute vec2 inTexCoord0;
+attribute vec3 inTangent;
 varying vec3 normal;
 varying vec4 color;
 varying vec2 texcoord;
-varying vec3 viewdir;
-varying vec3 lightdir;
+varying vec3 viewDir;
+varying vec3 lightDir;
 uniform mat4 mat[4];
-uniform vec3 lightpos;
+uniform vec3 lightPos;
 varying vec3 pos;
 varying vec3 tangent;
 
 void main(void)
 {
-  normal = normalize((mat[3]*vec4(innormal,1.0)).xyz);
-  tangent = normalize((mat[3]*vec4(intangent,1.0)).xyz);
+  normal = normalize((mat[3]*vec4(inNormal,1.0)).xyz);
+  tangent = normalize((mat[3]*vec4(inTangent,1.0)).xyz);
   //tangent = normalize(cross(normal, vec3(0.0, 1.0, 0.0)));
   vec3 bitangent = cross(normal, tangent);
-  vec3 position = (mat[1]*vec4(inposition,1.0)).xyz;
-  //  vec3 tmplightpos = (mat[1]*vec4(lightpos,1.0)).xyz;
-  vec3 tmplightpos = lightpos;
+  vec3 position = (mat[1]*vec4(inPosition,1.0)).xyz;
+  //  vec3 tmplightPos = (mat[1]*vec4(lightPos,1.0)).xyz;
+  vec3 tmplightPos = lightPos;
 
 
-  viewdir = -vec3(dot(position, tangent),
+  viewDir = -vec3(dot(position, tangent),
                  dot(position, bitangent),
                  dot(position, normal));
-  vec3 tmplightdir = normalize(tmplightpos-position);
-  lightdir = vec3(dot(tmplightdir, tangent),
-                  dot(tmplightdir, bitangent),
-                  dot(tmplightdir, normal));
-  color = incolor;
-  texcoord = intexcoord0;
-  gl_Position = mat[0]*mat[1]*vec4(inposition, 1.0);
-//  gl_Position = vec4(inposition, 1.0);
+  vec3 tmplightDir = normalize(tmplightPos-position);
+  lightDir = vec3(dot(tmplightDir, tangent),
+                  dot(tmplightDir, bitangent),
+                  dot(tmplightDir, normal));
+  color = inColor;
+  texcoord = inTexCoord0;
+  gl_Position = mat[0]*mat[1]*vec4(inPosition, 1.0);
+//  gl_Position = vec4(inPosition, 1.0);
 //  position = gl_Position.xyz;
-//  gl_Position = mat[0]*mat[1]*vec4(inposition, 1.0);
+//  gl_Position = mat[0]*mat[1]*vec4(inPosition, 1.0);
   pos = gl_Position.xyz;
 }

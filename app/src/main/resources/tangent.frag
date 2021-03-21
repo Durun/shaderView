@@ -6,13 +6,13 @@ uniform mat4 mat[4];
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
-uniform vec3 lightpos;
+uniform vec3 lightPos;
 uniform vec3 lightcolor;
 varying vec3 normal;
 varying vec4 color;
 varying vec2 texcoord;
-varying vec3 viewdir;
-varying vec3 lightdir;
+varying vec3 viewDir;
+varying vec3 lightDir;
 varying vec3 pos;
 varying vec3 tangent;
 
@@ -23,5 +23,5 @@ void main (void){
                    dot(pos, bitangent),
                    dot(pos, normal));
 
-  gl_FragColor = vec4(viewdir/2.0+0.5 , 1.0);
+  gl_FragColor = vec4(viewDir/2.0+0.5 , 1.0);
 }

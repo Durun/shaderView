@@ -4,13 +4,13 @@
 //
 uniform mat4 mat[4];
 uniform sampler2D texture0;
-uniform vec3 lightpos;
+uniform vec3 lightPos;
 uniform vec3 lightcolor;
 varying vec3 normal;
 varying vec4 color;
 varying vec2 texcoord;
-varying vec3 viewdir;
-varying vec3 lightdir;
+varying vec3 viewDir;
+varying vec3 lightDir;
 varying vec3 pos;
 
 const float PI = 3.141592653589793;
@@ -60,13 +60,13 @@ float D_GGX(vec3 n, vec3 h, float roughness) {
 
 void main (void){
   // view vector
-  vec3 v = normalize(viewdir);
+  vec3 v = normalize(viewDir);
 
   // bump mapping
   vec3 bump = (texture2D(texture0, texcoord)*2.0-1.0).xyz;
 
   // vector parameters
-  vec3 l = normalize(lightpos - pos);	// Spot light
+  vec3 l = normalize(lightPos - pos);	// Spot light
   vec3 n = normalize(normal + 0.2*bump);
   vec3 h = (l+v)/2.0;
 
