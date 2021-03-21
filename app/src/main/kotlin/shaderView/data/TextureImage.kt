@@ -17,7 +17,11 @@ class TextureImage(image: BufferedImage) {
 		for (y in 0 until height) {
 			for (x in 0 until width) {
 				val c = image.getRGB(x, y)
-				data.putInt(c and 0xff0000 shr 8 or (c and 0xff00 shl 8) or (c and 0xff shl 24) or 255)
+				val r = c and 0x00ff0000 shr 8
+				val g = c and 0x0000ff00 shl 8
+				val b = c and 0x000000ff shl 24
+				val a = 0x000000ff
+				data.putInt(r or g or b or a)
 			}
 		}
 		data.rewind()
