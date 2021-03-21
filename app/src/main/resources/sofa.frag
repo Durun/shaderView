@@ -109,8 +109,8 @@ void main (void){
 
   // color parameters
   float metalic = sampleMetallic(uv);
-  float smooth = 1.0 - sampleRoughness(uv);
-  float roughness = 1.0 - smooth*(metalic*0.2 + 0.8);
+  float smoothness = 1.0 - sampleRoughness(uv);
+  float roughness = 1.0 - smoothness*(metalic*0.2 + 0.8);
   vec3 metalColor = vec3(1.0, 0.8, 0.1);
   vec3 specularColor = (1.0-metalic)*lightcolor + metalic*metalColor;
   vec3 diffuseColor = sampleColor(uv);
