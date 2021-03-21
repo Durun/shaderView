@@ -12,29 +12,29 @@ class AppBase(
     val height: Int,
     val eventListener: AppListener? = null
 ) {
-    fun start() {
-        val window = run {
-            val profile = runCatching { GLProfile.get(GLProfile.GL3) }
-                .recover { GLProfile.get(GLProfile.GL2ES2) }
-                .getOrThrow()
-            val caps = GLCapabilities(profile).apply {
-                doubleBuffered = true
-                numSamples = 8
-                sampleBuffers = true
-            }
-            GLWindow.create(caps).apply {
-                title = this@AppBase.title
-                setSize(this@AppBase.width, this@AppBase.height)
-                addWindowListener { exitProcess(0) }
-                eventListener?.let {
-                    addGLEventListener(it)
-                    addMouseListener(it.mouseListener)
-                    addKeyListener(it.keyListener)
-                }
-
-            }
+    val window: GLWindow = run {
+        val profile = runCatching { GLProfile.get(GLProfile.GL3) }
+            .recover { GLProfile.get(GLProfile.GL2ES2) }
+            .getOrThrow()
+        val caps = GLCapabilities(profile).apply {
+            doubleBuffered = true
+            numSamples = 8
+            sampleBuffers = true
         }
+        GLWindow.create(caps).apply {
+            title = this@AppBase.title
+            setSize(this@AppBase.width, this@AppBase.height)
+            addWindowListener { exitProcess(0) }
+            eventListener?.let {
+                addGLEventListener(it)
+                addMouseListener(it.mouseListener)
+                addKeyListener(it.keyListener)
+            }
 
+        }
+    }
+
+    fun start() {
         window.isVisible = true
 
         val animator = FPSAnimator(window, 60)

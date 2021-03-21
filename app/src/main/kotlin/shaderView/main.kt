@@ -16,7 +16,7 @@ import shaderView.render.textured
 import java.nio.file.Path
 
 fun main() {
-	AppBase("shader", 480, 320, AppListener()).start()
+	AppBase("shader", 960, 720, AppListener()).start()
 }
 
 class AppListener : GLEventListener {
