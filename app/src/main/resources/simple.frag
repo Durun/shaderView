@@ -1,8 +1,4 @@
-//#version 120
-//
-// simple.frag
-//
-//uniform mat4 mat;
+
 uniform sampler2D texture0;
 uniform vec3 lightDir;
 varying vec3 normal;

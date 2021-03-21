@@ -1,9 +1,5 @@
-//#version 120
-//
-// simple.vert
-//
-//invariant gl_Position; // invariant out gl_Position; //for #version 130
-attribute vec3 inPosition;//in vec3 position;          //for #version 130
+
+attribute vec3 inPosition;
 attribute vec4 inColor;
 attribute vec3 inNormal;
 attribute vec2 inTexCoord0;

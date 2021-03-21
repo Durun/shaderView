@@ -1,7 +1,4 @@
-//#version 120
-//
-// simple.frag
-//
+
 uniform mat4 mat[4];
 uniform sampler2D texture0;
 uniform sampler2D texture1;
