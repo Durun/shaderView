@@ -63,6 +63,6 @@ java {
 }
 
 application {
-	// Define the main class for the application.
-	mainClass.set("shaderView.AppKt")
+    // Define the main class for the application.
+    mainClass.set("shaderView.MainKt")
 }
