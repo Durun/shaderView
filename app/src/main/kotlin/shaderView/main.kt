@@ -29,9 +29,9 @@ class AppListener(private val window: GLWindow) : GLEventListener {
         val width = 480
         val height = 320
         val titles = listOf(
-            "Wireframe",
-            "BRDF",
-            "BRDF + Parallax occlusion mapping"
+            "<- Wireframe ->",
+            "<- BRDF + Parallax occlusion mapping ->",
+            "<- BRDF ->"
         )
         val lightPos = Vec3(0.0f, 0.0f, 10f)
         val lightcolor = Vec3(1.0000f, 0.9434f, 0.9927f) // D65 light
