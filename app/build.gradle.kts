@@ -51,8 +51,11 @@ dependencies {
 
 tasks {
 	compileKotlin {
-		kotlinOptions.jvmTarget = "11"
-	}
+        kotlinOptions.jvmTarget = "11"
+    }
+    run.configure {
+        jvmArgs("--illegal-access=deny")
+    }
 }
 java {
 	sourceCompatibility = JavaVersion.VERSION_11
