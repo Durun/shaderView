@@ -55,6 +55,7 @@ tasks {
     }
     run.configure {
         jvmArgs("--illegal-access=deny")
+        workingDir = project.rootDir
     }
 }
 java {
