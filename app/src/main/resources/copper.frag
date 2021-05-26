@@ -85,7 +85,7 @@ void main (void){
   vec3 v = normalize(viewDir);
 
   // parallax mapping
-  float texscale = 2.0;
+  float texscale = 1.0;
   vec2 uv = getUV_LinearSearch(texcoord/texscale, v);
   vec3 bump = sampleBump(texture0, uv);
 

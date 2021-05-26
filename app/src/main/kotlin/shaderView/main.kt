@@ -10,7 +10,10 @@ import com.jogamp.opengl.GL2
 import com.jogamp.opengl.GLAutoDrawable
 import com.jogamp.opengl.GLEventListener
 import com.jogamp.opengl.util.PMVMatrix
-import shaderView.data.*
+import shaderView.data.Vec3
+import shaderView.data.Vec4
+import shaderView.data.loadFileTexture
+import shaderView.data.makePlane
 import shaderView.render.Object3D
 import shaderView.render.Shader
 import shaderView.render.textured
@@ -62,6 +65,7 @@ class AppListener(private val window: GLWindow) : GLEventListener {
             val vertexShader = Path.of("app/src/main/resources/vertex.vert")
             add(Shader(gl, vertexShader, Path.of("app/src/main/resources/edge.frag")))
             add(Shader(gl, vertexShader, Path.of("app/src/main/resources/brick.frag")))
+            add(Shader(gl, vertexShader, Path.of("app/src/main/resources/copper.frag")))
         }
 
         val brickNormal = loadFileTexture(Path.of("app/src/main/resources/brick_n.png"))
@@ -69,10 +73,15 @@ class AppListener(private val window: GLWindow) : GLEventListener {
         val brickHeight = loadFileTexture(Path.of("app/src/main/resources/brick_h.png"))
         val brickTextures = listOf(brickNormal, brickDiffuse, brickHeight)
 
+        val copperTextures = listOf(
+            loadFileTexture(Path.of("app/src/main/resources/10yen_n.png")),
+            loadFileTexture(Path.of("app/src/main/resources/10yen_n.png"))
+        )
 
         val brickColor = Vec4(0.4f, 0.2f, 0.2f, 1f)
         objects.add(makePlane(1.3f, color = brickColor).textured(gl, brickTextures, shaders[0]))
         objects.add(makePlane(1.3f, color = brickColor).textured(gl, brickTextures, shaders[1]))
+        objects.add(makePlane(1.3f, color = brickColor).textured(gl, copperTextures, shaders[2]))
 
         gl.glUseProgram(0)
     }
